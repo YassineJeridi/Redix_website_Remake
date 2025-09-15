@@ -1,0 +1,280 @@
+/* src/components/ServicesChatPopup/ServicesChatPopup.module.css */
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal {
+  position: fixed;
+  top: 20%;
+  left: 35%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  background: rgba(10, 10, 10, 0.95);
+  border: 1px solid rgba(193, 45, 224, 0.2);
+  border-radius: 24px;
+  backdrop-filter: blur(20px);
+  z-index: 2001;
+  overflow: hidden;
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(193, 45, 224, 0.1);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 2rem;
+  border-bottom: 1px solid rgba(193, 45, 224, 0.1);
+}
+
+.headerContent {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.headerIcon {
+  width: 50px;
+  height: 50px;
+  background: var(--primary-gradient);
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.2rem;
+  box-shadow: 0 8px 20px rgba(193, 45, 224, 0.3);
+}
+
+.headerText h3 {
+  color: var(--light-text);
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+}
+
+.headerText p {
+  color: var(--gray-text);
+  font-size: 0.9rem;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.closeButton {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(193, 45, 224, 0.2);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray-text);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.closeButton:hover {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+.form {
+  padding: 2rem;
+  max-height: 60vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-color) transparent;
+}
+
+.form::-webkit-scrollbar {
+  width: 4px;
+}
+
+.form::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.form::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 2px;
+}
+
+.fieldGroup {
+  margin-bottom: 1.5rem;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--light-text);
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.fieldIcon {
+  color: var(--primary-color);
+  font-size: 0.8rem;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(193, 45, 224, 0.2);
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+  color: var(--light-text);
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  resize: none;
+}
+
+.input:focus,
+.textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 0 3px rgba(193, 45, 224, 0.1);
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--gray-text);
+}
+
+.textarea {
+  min-height: 100px;
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+.submitButton {
+  width: 100%;
+  background: var(--primary-gradient);
+  border: none;
+  border-radius: 12px;
+  padding: 1rem;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  margin-bottom: 1rem;
+}
+
+.submitButton:hover:not(:disabled) {
+  box-shadow: 0 8px 25px rgba(193, 45, 224, 0.4);
+}
+
+.submitButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.loadingSpinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid white;
+  border-radius: 50%;
+}
+
+.sendIcon {
+  font-size: 0.9rem;
+}
+
+.successMessage,
+.errorMessage {
+  padding: 1rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+.successMessage {
+  background: rgba(0, 255, 0, 0.1);
+  border: 1px solid rgba(0, 255, 0, 0.2);
+  color: #00ff88;
+}
+
+.errorMessage {
+  background: rgba(255, 0, 0, 0.1);
+  border: 1px solid rgba(255, 0, 0, 0.2);
+  color: #ff6b6b;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .modal {
+    width: 95%;
+    max-height: 95vh;
+  }
+  
+  .header,
+  .form {
+    padding: 1.5rem;
+  }
+  
+  .headerContent {
+    gap: 0.8rem;
+  }
+  
+  .headerIcon {
+    width: 45px;
+    height: 45px;
+    font-size: 1.1rem;
+  }
+  
+  .headerText h3 {
+    font-size: 1.2rem;
+  }
+  
+  .form {
+    max-height: 70vh;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal {
+    width: 98%;
+    border-radius: 20px;
+  }
+  
+  .header,
+  .form {
+    padding: 1rem;
+  }
+  
+  .headerContent {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .headerIcon {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+}

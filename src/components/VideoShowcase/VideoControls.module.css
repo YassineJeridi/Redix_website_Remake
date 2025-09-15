@@ -1,0 +1,97 @@
+/* src/components/VideoShowcase/VideoControls.module.css */
+.controls {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.navButton {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(193, 45, 224, 0.4);
+    border-radius: 25px;
+    color: var(--primary-color);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 1rem 1.5rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    backdrop-filter: blur(15px);
+    transition: all 0.3s ease;
+    pointer-events: auto;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.navButton:hover:not(:disabled) {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+    box-shadow: 0 12px 35px rgba(193, 45, 224, 0.4);
+    transform: translateY(-2px);
+}
+
+.navButton:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.prevButton {
+    margin-left: -3rem;
+}
+
+.nextButton {
+    margin-right: -3rem;
+}
+
+.buttonText {
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* Progress Indicator */
+.controlsProgress {
+    position: absolute;
+    bottom: -4rem;
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: auto;
+}
+
+
+/* Mobile - Hide controls */
+@media (max-width: 768px) {
+    .controls {
+        display: none;
+    }
+}
+
+/* Tablet adjustments */
+@media (max-width: 1024px) {
+    .prevButton {
+        margin-left: -2rem;
+    }
+
+    .nextButton {
+        margin-right: -2rem;
+    }
+
+    .navButton {
+        padding: 0.8rem 1.2rem;
+        font-size: 1rem;
+    }
+
+    .buttonText {
+        font-size: 0.8rem;
+    }
+}

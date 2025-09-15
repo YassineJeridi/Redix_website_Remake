@@ -1,0 +1,569 @@
+/* src/components/DevProject/DevProject.module.css */
+.devProjectSection {
+    padding: 8rem 0;
+
+    position: relative;
+    overflow: hidden;
+}
+
+.backgroundElements {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.gradientOrb {
+    position: absolute;
+    top: 20%;
+    right: 10%;
+    width: 400px;
+    height: 400px;
+ 
+    border-radius: 50%;
+    filter: blur(60px);
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    position: relative;
+    z-index: 2;
+}
+
+/* Header Styles */
+.header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.sectionTag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(193, 45, 224, 0.15);
+    border: 1px solid rgba(193, 45, 224, 0.4);
+    color: var(--primary-color);
+    padding: 0.8rem 2rem;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 2rem;
+    backdrop-filter: blur(15px);
+}
+
+.title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 900;
+    margin: 0 0 1.5rem 0;
+    background: linear-gradient(135deg, #ffffff 0%, #c12de0 50%, #e856ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    color: var(--gray-text);
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.7;
+}
+
+/* Filter Styles */
+.filterContainer {
+    margin-bottom: 3rem;
+}
+
+.filterTabs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.filterIcon {
+    color: var(--primary-color);
+    margin-right: 0.5rem;
+}
+
+.filterTab {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(193, 45, 224, 0.2);
+    color: var(--light-text);
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    backdrop-filter: blur(10px);
+}
+
+.filterTab:hover,
+.filterTab.active {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+    box-shadow: 0 5px 15px rgba(193, 45, 224, 0.4);
+}
+
+/* Project Grid */
+.projectsContainer {
+    margin-bottom: 4rem;
+}
+
+.projectGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+/* Project Card */
+.projectCard {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(193, 45, 224, 0.1);
+    border-radius: 20px;
+    overflow: hidden;
+    backdrop-filter: blur(20px);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    position: relative;
+}
+
+.projectCard:hover {
+    border-color: rgba(193, 45, 224, 0.4);
+    box-shadow: 0 20px 40px rgba(193, 45, 224, 0.2);
+}
+
+.projectCard.featured {
+    border-color: rgba(193, 45, 224, 0.6);
+    background: rgba(193, 45, 224, 0.05);
+}
+
+.featuredBadge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: var(--primary-color);
+    color: white;
+    padding: 0.4rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    z-index: 5;
+    box-shadow: 0 4px 15px rgba(193, 45, 224, 0.3);
+}
+
+.imageContainer {
+    position: relative;
+    width: 100%;
+    height: 250px;
+    overflow: hidden;
+}
+
+.projectImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.projectCard:hover .projectImage {
+    transform: scale(1.05);
+}
+
+.imageOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.projectCard:hover .imageOverlay {
+    opacity: 1;
+}
+
+.overlayContent {
+    display: flex;
+    gap: 1rem;
+}
+
+.viewButton,
+.liveButton {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.viewButton:hover,
+.liveButton:hover {
+    background: #e856ff;
+    box-shadow: 0 5px 15px rgba(193, 45, 224, 0.4);
+}
+
+/* Project Info */
+.projectInfo {
+    padding: 2rem;
+}
+
+.projectHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+}
+
+.projectTitle {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--light-text);
+    margin: 0;
+}
+
+.projectYear {
+    background: rgba(193, 45, 224, 0.2);
+    color: var(--primary-color);
+    padding: 0.3rem 0.8rem;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.projectSubtitle {
+    color: var(--primary-color);
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin: 0 0 1rem 0;
+}
+
+.projectDescription {
+    color: var(--gray-text);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.projectMeta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.techStack {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.techTag {
+    background: rgba(193, 45, 224, 0.1);
+    color: var(--primary-color);
+    padding: 0.3rem 0.8rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.techMore {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--gray-text);
+    padding: 0.3rem 0.8rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+}
+
+.projectMetrics {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.metric {
+    color: var(--gray-text);
+    font-size: 0.8rem;
+}
+
+/* Stats Section */
+.statsSection {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 3rem 2rem;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(193, 45, 224, 0.1);
+}
+
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    text-align: center;
+}
+
+.statItem h3 {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--primary-color);
+    margin: 0 0 0.5rem 0;
+}
+
+.statItem p {
+    color: var(--gray-text);
+    font-weight: 500;
+}
+
+/* Modal Styles */
+.modalBackdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    padding: 2rem;
+}
+
+.modalContainer {
+    background: rgba(10, 10, 10, 0.95);
+    border: 1px solid rgba(193, 45, 224, 0.3);
+    border-radius: 25px;
+    max-width: 900px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    backdrop-filter: blur(25px);
+}
+
+.closeButton {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    font-size: 1.5rem;
+    z-index: 10;
+    transition: all 0.3s ease;
+}
+
+.closeButton:hover {
+    background: var(--primary-color);
+    transform: rotate(90deg);
+}
+
+.modalImage {
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+}
+
+.modalImage img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.modalContent {
+    padding: 2rem;
+}
+
+.modalHeader h2 {
+    color: var(--light-text);
+    font-size: 2rem;
+    margin: 0 0 0.5rem 0;
+}
+
+.modalSubtitle {
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.modalDetails {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+}
+
+.detailRow {
+    color: var(--gray-text);
+}
+
+.detailRow strong {
+    color: var(--light-text);
+}
+
+.liveStatus {
+    color: #4ade80;
+    font-weight: 600;
+}
+
+.modalDescription {
+    color: var(--gray-text);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+}
+
+.modalTech,
+.modalFeatures {
+    margin-bottom: 2rem;
+}
+
+.modalTech h4,
+.modalFeatures h4 {
+    color: var(--light-text);
+    margin-bottom: 1rem;
+}
+
+.techList {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.techBadge {
+    background: rgba(193, 45, 224, 0.2);
+    color: var(--primary-color);
+    padding: 0.5rem 1rem;
+    border-radius: 15px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.modalFeatures ul {
+    list-style: none;
+    padding: 0;
+}
+
+.modalFeatures li {
+    color: var(--gray-text);
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modalFeatures li:before {
+    content: "✓";
+    color: var(--primary-color);
+    font-weight: bold;
+    margin-right: 0.5rem;
+}
+
+.modalActions {
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.visitButton {
+    background: var(--primary-color);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.visitButton:hover {
+    background: #e856ff;
+    box-shadow: 0 10px 25px rgba(193, 45, 224, 0.4);
+    transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .devProjectSection {
+        padding: 6rem 0;
+    }
+
+    .projectGrid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .projectCard {
+        margin: 0 1rem;
+    }
+
+    .filterTabs {
+        justify-content: center;
+        padding: 0 1rem;
+    }
+
+    .statsGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .modalContainer {
+        margin: 1rem;
+        max-height: 85vh;
+    }
+
+    .modalDetails {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 1rem;
+    }
+
+    .projectCard {
+        margin: 0;
+    }
+
+    .projectHeader {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .statsGrid {
+        grid-template-columns: 1fr;
+    }
+}

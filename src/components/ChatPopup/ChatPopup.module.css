@@ -1,0 +1,162 @@
+/* src/components/ChatPopup/ChatPopup.module.css */
+.chatButton {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 60px;
+  height: 60px;
+  background: var(--primary-gradient);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(193, 45, 224, 0.3);
+  transition: all 0.3s ease;
+  z-index: 1001;
+  animation: pulse 2s infinite;
+}
+
+.chatButton:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 30px rgba(193, 45, 224, 0.4);
+}
+
+.chatButton.active {
+  animation: none;
+}
+
+.chatPopup {
+  position: fixed;
+  bottom: 5rem;
+  right: 2rem;
+  width: 350px;
+  background: rgba(10, 10, 10, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(193, 45, 224, 0.2);
+  border-radius: 20px;
+  padding: 1.5rem;
+  transform: translateY(100px) scale(0.8);
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.chatPopup.open {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+.chatHeader {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.chatHeader h3 {
+  color: var(--light-text);
+  margin: 0 0 0.5rem 0;
+  font-size: 1.2rem;
+}
+
+.chatHeader p {
+  color: var(--gray-text);
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.chatForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.input, .select, .textarea {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(193, 45, 224, 0.2);
+  border-radius: 10px;
+  padding: 0.8rem;
+  color: var(--light-text);
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.input:focus, .select:focus, .textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(193, 45, 224, 0.1);
+}
+
+.input::placeholder, .textarea::placeholder {
+  color: var(--gray-text);
+}
+
+.submitBtn {
+  background: var(--primary-gradient);
+  border: none;
+  border-radius: 10px;
+  padding: 0.8rem;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.submitBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(193, 45, 224, 0.3);
+}
+
+.submitBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.successMessage, .errorMessage {
+  text-align: center;
+  padding: 0.5rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.successMessage {
+  background: rgba(0, 255, 0, 0.1);
+  color: #00ff00;
+  border: 1px solid rgba(0, 255, 0, 0.2);
+}
+
+.errorMessage {
+  background: rgba(255, 0, 0, 0.1);
+  color: #ff4444;
+  border: 1px solid rgba(255, 0, 0, 0.2);
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.2);
+  z-index: 999;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 4px 20px rgba(193, 45, 224, 0.3); }
+  50% { box-shadow: 0 4px 30px rgba(193, 45, 224, 0.5); }
+  100% { box-shadow: 0 4px 20px rgba(193, 45, 224, 0.3); }
+}
+
+@media (max-width: 768px) {
+  .chatPopup {
+    width: 300px;
+    right: 1rem;
+  }
+  
+  .chatButton {
+    bottom: 1rem;
+    right: 1rem;
+  }
+}

@@ -1,1 +1,3 @@
-# Redix_website_Remake
+# Redix Digital Solutions Website
+
+Modern animated website built with React + Vite

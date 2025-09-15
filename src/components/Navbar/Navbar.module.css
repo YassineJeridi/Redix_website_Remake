@@ -1,0 +1,329 @@
+/* src/components/Navbar/Navbar.module.css */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 1rem 0;
+  background: rgba(10, 10, 10, 0.8);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(193, 45, 224, 0.1);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.navbar.scrolled {
+  padding: 0.5rem 0;
+  background: rgba(10, 10, 10, 0.95);
+  border-bottom: 1px solid rgba(193, 45, 224, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Logo Styles */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.logoImage {
+  height: 75px;
+  width: auto;
+  filter: drop-shadow(0 0 10px rgba(193, 45, 224, 0.3));
+  transition: all 0.3s ease;
+}
+
+.logoText {
+  font-size: 1.5rem;
+  font-weight: 800;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.02em;
+}
+
+/* Desktop Navigation */
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: var(--light-text);
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 0.8rem 1.2rem;
+  border-radius: 12px;
+  position: relative;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.navLink:hover {
+  color: var(--primary-color);
+  background: rgba(193, 45, 224, 0.1);
+}
+
+.navLink.active {
+  color: var(--primary-color);
+  background: rgba(193, 45, 224, 0.15);
+  box-shadow: 0 0 20px rgba(193, 45, 224, 0.2);
+}
+
+.navIcon {
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.navLink:hover .navIcon {
+  transform: scale(1.1);
+}
+
+.linkGlow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(193, 45, 224, 0.1),
+    transparent
+  );
+  animation: linkGlowMove 2s ease-in-out infinite;
+}
+
+/* Mobile Menu Toggle */
+.menuToggle {
+  display: none;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(193, 45, 224, 0.3);
+  border-radius: 12px;
+  width: 50px;
+  height: 50px;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-color);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.menuToggle:hover {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 20px rgba(193, 45, 224, 0.4);
+}
+
+/* Mobile Menu */
+.mobileBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  z-index: 999;
+}
+
+.mobileMenu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 300px;
+  background: rgba(10, 10, 10, 0.95);
+  backdrop-filter: blur(30px);
+  border-left: 1px solid rgba(193, 45, 224, 0.2);
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.3);
+}
+
+.mobileMenuHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(193, 45, 224, 0.1);
+}
+
+.mobileLogoImage {
+  height: 60px;
+  width: auto;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 0 15px rgba(193, 45, 224, 0.4));
+}
+
+.mobileLogoText {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--light-text);
+  text-align: center;
+  margin: 0;
+}
+
+.mobileNavLinks {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex: 1;
+}
+
+.mobileNavLink {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  text-decoration: none;
+  color: var(--light-text);
+  padding: 1rem;
+  border-radius: 12px;
+  margin-bottom: 0.5rem;
+  transition: all 0.3s ease;
+  position: relative;
+  font-weight: 500;
+}
+
+.mobileNavLink:hover,
+.mobileNavLink.activeMobile {
+  background: rgba(193, 45, 224, 0.1);
+  color: var(--primary-color);
+  border-left: 3px solid var(--primary-color);
+}
+
+.mobileNavIcon {
+  font-size: 1.1rem;
+  width: 20px;
+}
+
+.activeDot {
+  position: absolute;
+  right: 1rem;
+  width: 8px;
+  height: 8px;
+  background: var(--primary-color);
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(193, 45, 224, 0.6);
+}
+
+.mobileCTA {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(193, 45, 224, 0.1);
+}
+
+.ctaButton {
+  width: 100%;
+  background: var(--primary-gradient);
+  border: none;
+  border-radius: 12px;
+  padding: 1rem;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ctaButton:hover {
+  box-shadow: 0 8px 25px rgba(193, 45, 224, 0.4);
+  transform: translateY(-2px);
+}
+
+/* Animations */
+@keyframes linkGlowMove {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+/* Responsive Design */
+@media (max-width: 888px) {
+  .navLinks {
+    display: none;
+  }
+  
+  .menuToggle {
+    display: flex;
+  }
+  
+  .container {
+    padding: 0 1rem;
+  }
+  
+  .logoImage {
+    height: 40px;
+  }
+  
+  .logoText {
+    font-size: 1.3rem;
+  }
+  
+  .mobileMenu {
+    width: 280px;
+  }
+}
+
+@media (max-width: 480px) {
+  .mobileMenu {
+    width: 100%;
+    border-left: none;
+  }
+  
+  .logoText {
+    display: none;
+  }
+  
+  .logoImage {
+    height: 35px;
+  }
+}
+
+/* High-end browser support */
+@supports (backdrop-filter: blur(10px)) {
+  .navbar {
+    backdrop-filter: blur(20px);
+  }
+  
+  .mobileMenu {
+    backdrop-filter: blur(30px);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .linkGlow {
+    animation: none;
+  }
+  
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

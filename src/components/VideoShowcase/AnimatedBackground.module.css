@@ -1,0 +1,233 @@
+/* src/components/VideoShowcase/AnimatedBackground.module.css */
+.background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+}
+
+/* Floating Icons */
+.floatingIcons {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.floatingIcon {
+    position: absolute;
+    font-size: 1.5rem;
+    color: rgba(193, 45, 224, 0.3);
+    opacity: 0.6;
+}
+
+.icon1 {
+    top: 10%;
+    left: 5%;
+}
+
+.icon2 {
+    top: 15%;
+    right: 10%;
+}
+
+.icon3 {
+    top: 30%;
+    left: 15%;
+}
+
+.icon4 {
+    top: 40%;
+    right: 20%;
+}
+
+.icon5 {
+    top: 60%;
+    left: 8%;
+}
+
+.icon6 {
+    top: 70%;
+    right: 15%;
+}
+
+.icon7 {
+    top: 80%;
+    left: 25%;
+}
+
+.icon8 {
+    top: 25%;
+    left: 70%;
+}
+
+.icon9 {
+    top: 50%;
+    right: 8%;
+}
+
+.icon10 {
+    top: 85%;
+    right: 30%;
+}
+
+.icon11 {
+    top: 5%;
+    left: 40%;
+}
+
+.icon12 {
+    top: 90%;
+    left: 60%;
+}
+
+/* Gradient Orbs */
+.gradientOrbs {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+}
+
+.orb1 {
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(193, 45, 224, 0.4), transparent);
+    top: 10%;
+    left: 10%;
+}
+
+.orb2 {
+    width: 150px;
+    height: 150px;
+    background: radial-gradient(circle, rgba(232, 86, 255, 0.3), transparent);
+    top: 60%;
+    right: 20%;
+}
+
+.orb3 {
+    width: 180px;
+    height: 180px;
+    background: radial-gradient(circle, rgba(69, 183, 209, 0.3), transparent);
+    bottom: 20%;
+    left: 30%;
+}
+
+.orb4 {
+    width: 160px;
+    height: 160px;
+    background: radial-gradient(circle, rgba(240, 147, 251, 0.3), transparent);
+    top: 30%;
+    right: 15%;
+}
+
+.orb5 {
+    width: 140px;
+    height: 140px;
+    background: radial-gradient(circle, rgba(254, 202, 87, 0.3), transparent);
+    bottom: 40%;
+    right: 40%;
+}
+
+.orb6 {
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, rgba(72, 219, 251, 0.3), transparent);
+    top: 50%;
+    left: 60%;
+}
+
+.orb7 {
+    width: 220px;
+    height: 220px;
+    background: radial-gradient(circle, rgba(193, 45, 224, 0.2), transparent);
+    bottom: 10%;
+    right: 10%;
+}
+
+.orb8 {
+    width: 170px;
+    height: 170px;
+    background: radial-gradient(circle, rgba(232, 86, 255, 0.2), transparent);
+    top: 20%;
+    left: 80%;
+}
+
+/* Particles */
+.particles {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.particle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(193, 45, 224, 0.8);
+}
+
+/* Rotating Rings */
+.rotatingRings {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.ring {
+    position: absolute;
+    border: 1px solid rgba(193, 45, 224, 0.1);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.ring1 {
+    width: 600px;
+    height: 600px;
+    border-top-color: rgba(193, 45, 224, 0.3);
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+}
+
+.ring2 {
+    width: 800px;
+    height: 800px;
+    border-left-color: rgba(232, 86, 255, 0.2);
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-bottom-color: rgba(232, 86, 255, 0.2);
+}
+
+.ring3 {
+    width: 1000px;
+    height: 1000px;
+    border-right-color: rgba(193, 45, 224, 0.15);
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+
+    .floatingIcon,
+    .orb,
+    .ring,
+    .particle {
+        animation: none !important;
+    }
+}

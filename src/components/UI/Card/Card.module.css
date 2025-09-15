@@ -1,0 +1,47 @@
+/* src/components/UI/Card/Card.module.css */
+.card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(193, 45, 224, 0.1);
+  border-radius: 15px;
+  padding: 1.5rem;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.hoverable:hover {
+  transform: translateY(-5px);
+  border-color: rgba(193, 45, 224, 0.3);
+  box-shadow: 0 10px 30px rgba(193, 45, 224, 0.1);
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+/* Variants */
+.default {
+  /* Default styling already applied above */
+}
+
+.elevated {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.elevated:hover {
+  box-shadow: 0 8px 30px rgba(193, 45, 224, 0.2);
+}
+
+.outlined {
+  background: transparent;
+  border: 2px solid rgba(193, 45, 224, 0.2);
+}
+
+.filled {
+  background: rgba(193, 45, 224, 0.05);
+  border-color: rgba(193, 45, 224, 0.2);
+}
+
+.gradient {
+  background: linear-gradient(135deg, rgba(193, 45, 224, 0.1), rgba(193, 45, 224, 0.05));
+  border-color: rgba(193, 45, 224, 0.3);
+}
