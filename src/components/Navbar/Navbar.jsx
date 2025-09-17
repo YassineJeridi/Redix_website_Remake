@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaBars, FaTimes, FaHome, FaUser, FaCog, FaTrophy, FaEnvelope } from 'react-icons/fa';
 import styles from './Navbar.module.css';
+import logoImage from '/redix.png';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -150,7 +151,7 @@ const Navbar = () => {
           onClick={() => scrollToSection('home')}
         >
           <motion.img
-            src="/redix.png"
+            src={logoImage}
             alt="Redix Digital Solutions"
             className={styles.logoImage}
             whileHover={{ brightness: 1.2 }}

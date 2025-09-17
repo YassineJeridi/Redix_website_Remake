@@ -1,7 +1,7 @@
 /* src/components/VideoShowcase/VideoShowcase.module.css */
+
 .videoShowcase {
     padding: 8rem 0;
-    
     position: relative;
     overflow: hidden;
     min-height: 100vh;
@@ -35,6 +35,7 @@
     text-transform: uppercase;
     letter-spacing: 1px;
     margin-bottom: 2rem;
+    -webkit-backdrop-filter: blur(15px);
     backdrop-filter: blur(15px);
     cursor: pointer;
     transition: all 0.3s ease;
@@ -81,6 +82,7 @@
     display: flex;
     justify-content: center;
     perspective: 1000px;
+    margin-bottom: 20px;
 }
 
 .swipeIndicator {
@@ -89,10 +91,15 @@
     left: 50%;
     transform: translateX(-50%);
     color: var(--gray-text);
-    font-size: 0.9rem;
+    font-size: 0.81rem;
+    font-weight: 600;
+    text-align: center;
+    
     padding: 0.5rem 1.5rem;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 25px;
+    -webkit-backdrop-filter: blur(10px);
+    width: 80%;
     backdrop-filter: blur(10px);
     border: 1px solid rgba(193, 45, 224, 0.2);
 }
@@ -148,6 +155,7 @@
     transition: all 0.3s ease;
     opacity: 0.6;
     background: rgba(255, 255, 255, 0.05);
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
 }
 

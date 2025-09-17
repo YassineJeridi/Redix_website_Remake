@@ -1,88 +1,109 @@
 // data/clients.js
+
+const clientsLogos = {
+  aiesec: "assets/logos/aiesec-LOGO.png",
+  efphq: "assets/logos/EFPHQ-Logo.png",
+  esenManouba: "assets/logos/esen-manouba.png",
+  esenAmbassadors: "assets/logos/ESEN-AMBASSADORS-LOGO.png",
+  esenMicrosoftClub: "assets/logos/esen-microsoft-club-logo.jpg",
+  flayes: "assets/logos/FLAYES.png",
+  frita: "assets/logos/frita-logo.png",
+  g8: "assets/logos/G8.png",
+  ghamza: "assets/logos/ghamza.png",
+  imc: "assets/logos/IMC-LOGO.png",
+  isamm: "assets/logos/isamm-logo.png",
+  jciManouba: "assets/logos/JCI-Manouba.png",
+  moatezClinic: "assets/logos/Moatez-logo.png",
+  novart: "assets/logos/novart.png",
+  orchidee: "assets/logos/orchidee-logo.png",
+  sbh: "assets/logos/sbh.png",
+  coinLogo: "assets/logos/coin-logo.png"
+};
+
 export const clients = [
   {
     name: "AIESEC",
-    logo: "/assets/logos/aiesec-LOGO.png",
+    logo: clientsLogos.aiesec,
     type: "International Organization"
   },
   {
     name: "EFPHQ Tunisia",
-    logo: "/assets/logos/EFPHQ-Logo.png",
+    logo: clientsLogos.efphq,
     type: "Educational Institution"
   },
   {
     name: "ESEN Manouba",
-    logo: "/assets/logos/esen-manouba.png",
+    logo: clientsLogos.esenManouba,
     type: "University"
   },
   {
     name: "ESEN Ambassadors",
-    logo: "/assets/logos/ESEN-AMBASSADORS-LOGO.png",
+    logo: clientsLogos.esenAmbassadors,
     type: "Student Organization"
   },
   {
     name: "ESEN Microsoft Club",
-    logo: "/assets/logos/esen-microsoft-club-logo.jpg",
+    logo: clientsLogos.esenMicrosoftClub,
     type: "Tech Community"
   },
   {
     name: "Flayes",
-    logo: "/assets/logos/FLAYES.png",
+    logo: clientsLogos.flayes,
     type: "Technology Startup"
   },
   {
     name: "Fast Food Frita",
-    logo: "/assets/logos/frita-logo.png",
+    logo: clientsLogos.frita,
     type: "Restaurant Chain"
   },
   {
     name: "G8",
-    logo: "/assets/logos/G8.png",
+    logo: clientsLogos.g8,
     type: "Business Group"
   },
   {
     name: "Ghamza",
-    logo: "/assets/logos/ghamza.png",
+    logo: clientsLogos.ghamza,
     type: "Brand"
   },
   {
     name: "IMC",
-    logo: "/assets/logos/IMC-LOGO.png",
+    logo: clientsLogos.imc,
     type: "Marketing Agency"
   },
   {
     name: "ISAMM",
-    logo: "/assets/logos/isamm-logo.png",
+    logo: clientsLogos.isamm,
     type: "University"
   },
   {
     name: "JCI Manouba",
-    logo: "/assets/logos/JCI-Manouba.png",
+    logo: clientsLogos.jciManouba,
     type: "Chamber of Commerce"
   },
   {
     name: "Moatez Clinic",
-    logo: "/assets/logos/Moatez-logo.png",
+    logo: clientsLogos.moatezClinic,
     type: "Healthcare"
   },
   {
     name: "Novart",
-    logo: "/assets/logos/novart.png",
+    logo: clientsLogos.novart,
     type: "Technology Company"
   },
   {
     name: "Orchidee",
-    logo: "/assets/logos/orchidee-logo.png",
+    logo: clientsLogos.orchidee,
     type: "Beauty & Wellness"
   },
   {
     name: "SBH",
-    logo: "/assets/logos/sbh.png",
+    logo: clientsLogos.sbh,
     type: "Business Services"
   },
   {
     name: "Coin Logo",
-    logo: "/assets/logos/coin-logo.png",
+    logo: clientsLogos.coinLogo,
     type: "Cryptocurrency"
   }
 ];

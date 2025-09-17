@@ -8,5 +8,11 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     assetsDir: 'assets'
+  },
+  publicDir: 'public', // Ensure this is set
+  server: {
+    fs: {
+      strict: false // Allow serving files outside of root if needed
+    }
   }
 })

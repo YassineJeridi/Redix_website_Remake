@@ -1,253 +1,274 @@
 // src/components/VideoShowcase/VideoCard.jsx
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback, memo } from 'react';
 import { motion } from 'framer-motion';
-import { FaPlay, FaPause } from 'react-icons/fa';
+import { FaPlay, FaPause, FaVolumeUp } from 'react-icons/fa';
 import styles from './VideoCard.module.css';
 
-const VideoCard = ({ video, videoRef, isActive, index, isTransitioning }) => {
-    const [isHovered, setIsHovered] = useState(false);
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [showIcon, setShowIcon] = useState(false);
-    const [isInView, setIsInView] = useState(false);
-    const cardRef = useRef(null);
-
-    const isReel = video.type === 'reel';
-    const isLandscape = video.type === 'landscape';
-
-    // Intersection Observer to detect when video card is in view
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                setIsInView(entry.isIntersecting);
-            },
-            {
-                threshold: 0.5, // Video is considered in view when 50% is visible
-                rootMargin: '-10% 0px -10% 0px' // Add some margin for better UX
-            }
-        );
-
-        if (cardRef.current) {
-            observer.observe(cardRef.current);
-        }
-
-        return () => {
-            if (cardRef.current) {
-                observer.unobserve(cardRef.current);
-            }
-        };
-    }, []);
-
-    // Handle video events and setup
-    useEffect(() => {
-        const videoElement = videoRef.current;
-        if (!videoElement) return;
-
-        // Set video to unmuted with full volume by default
-        videoElement.muted = false;
-        videoElement.volume = 1.0; // Maximum volume
-
-        const handlePlay = () => setIsPlaying(true);
-        const handlePause = () => setIsPlaying(false);
-
-        videoElement.addEventListener('play', handlePlay);
-        videoElement.addEventListener('pause', handlePause);
-
-        return () => {
-            videoElement.removeEventListener('play', handlePlay);
-            videoElement.removeEventListener('pause', handlePause);
-        };
-    }, [videoRef]);
-
-    // Auto-play/pause based on section visibility
-    useEffect(() => {
-        if (!videoRef.current || !isActive) return;
-
-        if (isInView) {
-            // Play video when section comes into view
-            videoRef.current.play().catch(() => { });
-        } else {
-            // Pause video when section goes out of view
-            videoRef.current.pause();
-        }
-    }, [isInView, isActive, videoRef]);
-
-    // Reset video when index changes
-    useEffect(() => {
-        if (videoRef.current && isActive && isInView) {
-            videoRef.current.currentTime = 0;
-            videoRef.current.play().catch(() => { });
-        }
-    }, [index, isActive, isInView]);
-
-    const togglePlay = () => {
-        if (!videoRef.current) return;
-
-        if (videoRef.current.paused) {
-            videoRef.current.play().catch(() => { });
-        } else {
-            videoRef.current.pause();
-        }
-
-        // Show the icon briefly
-        setShowIcon(true);
-        setTimeout(() => {
-            setShowIcon(false);
-        }, 1000); // Hide after 1 second
+// Direction-aware animation variants
+const slideVariants = {
+  enter: (direction) => {
+    return {
+      x: direction > 0 ? 300 : direction < 0 ? -300 : 0,
+      opacity: 0,
+      scale: 0.9,
+      rotateY: direction > 0 ? 15 : direction < 0 ? -15 : 0,
     };
-
-    // Animation variants
-    const cardVariants = {
-        enter: {
-            x: 300,
-            opacity: 0,
-            scale: 0.8,
-            rotateY: 25
-        },
-        center: {
-            x: 0,
-            opacity: 1,
-            scale: 1,
-            rotateY: 0,
-            transition: {
-                duration: 0.6,
-                ease: [0.25, 0.46, 0.45, 0.94]
-            }
-        },
-        exit: {
-            x: -300,
-            opacity: 0,
-            scale: 0.8,
-            rotateY: -25,
-            transition: {
-                duration: 0.4,
-                ease: [0.25, 0.46, 0.45, 0.94]
-            }
-        }
+  },
+  center: {
+    x: 0,
+    opacity: 1,
+    scale: 1,
+    rotateY: 0,
+    transition: {
+      duration: 0.5,
+      ease: [0.25, 0.46, 0.45, 0.94],
+      type: "tween"
+    }
+  },
+  exit: (direction) => {
+    return {
+      x: direction > 0 ? -300 : direction < 0 ? 300 : 0,
+      opacity: 0,
+      scale: 0.9,
+      rotateY: direction > 0 ? -15 : direction < 0 ? 15 : 0,
+      transition: {
+        duration: 0.3,
+        ease: [0.25, 0.46, 0.45, 0.94],
+        type: "tween"
+      }
     };
-
-    const iconVariants = {
-        hidden: {
-            opacity: 0,
-            scale: 0.5
-        },
-        visible: {
-            opacity: 1,
-            scale: 1,
-            transition: {
-                duration: 0.3,
-                ease: "easeOut"
-            }
-        },
-        exit: {
-            opacity: 0,
-            scale: 1.2,
-            transition: {
-                duration: 0.3,
-                ease: "easeIn"
-            }
-        }
-    };
-
-    return (
-        <motion.div
-            ref={cardRef}
-            className={`${styles.videoCard} ${styles[video.type]} ${isActive ? styles.active : ''}`}
-            variants={cardVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            layout
-        >
-            {/* Video Background */}
-            <div className={styles.videoContainer}>
-                <video
-                    ref={videoRef}
-                    className={styles.backgroundVideo}
-                    src={video.videoUrl}
-                    muted={false} // Unmuted by default
-                    loop
-                    playsInline
-                    poster={video.thumbnailUrl}
-                    onClick={togglePlay}
-                />
-
-                {/* Overlay Gradient */}
-                <div className={styles.videoOverlay} />
-
-                {/* Category Badge */}
-                <motion.div
-                    className={styles.categoryBadge}
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
-                >
-                    {video.category}
-                </motion.div>
-
-                {/* Format Indicator */}
-                <div className={styles.formatIndicator}>
-                    <span className={styles.formatBadge}>
-                        {isReel ? 'REEL' : 'LANDSCAPE'}
-                    </span>
-                </div>
-
-                {/* Transient Play/Pause Icon */}
-                {showIcon && (
-                    <motion.div
-                        className={styles.transientIcon}
-                        variants={iconVariants}
-                        initial="hidden"
-                        animate="visible"
-                        exit="exit"
-                    >
-                        {isPlaying ? <FaPause /> : <FaPlay />}
-                    </motion.div>
-                )}
-
-                {/* Volume Indicator - Only show when video is playing and in view */}
-                {isPlaying && isInView && (
-                    <motion.div
-                        className={styles.volumeIndicator}
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.8 }}
-                    >
-                        <div className={styles.volumeBars}>
-                            <div className={styles.volumeBar}></div>
-                            <div className={styles.volumeBar}></div>
-                            <div className={styles.volumeBar}></div>
-                        </div>
-                    </motion.div>
-                )}
-
-
-            </div>
-
-            {/* Active Indicator */}
-            {isActive && (
-                <motion.div
-                    className={styles.activeIndicator}
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: 0.3 }}
-                />
-            )}
-
-            {/* Loading Overlay */}
-            {isTransitioning && (
-                <motion.div
-                    className={styles.loadingOverlay}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                >
-                    <div className={styles.loadingSpinner} />
-                </motion.div>
-            )}
-        </motion.div>
-    );
+  }
 };
 
+const VideoCard = memo(({ 
+  video, 
+  isActive, 
+  index, 
+  isTransitioning, 
+  isVisible,
+  onVideoLoad,
+  onVideoError,
+  direction = 0 // Default to 0 (no direction)
+}) => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
+  const [showPlayIcon, setShowPlayIcon] = useState(false);
+  const [isIntersecting, setIsIntersecting] = useState(false);
+  
+  const videoRef = useRef(null);
+  const cardRef = useRef(null);
+  const timeoutRef = useRef(null);
+  const observerRef = useRef(null);
+
+  // Optimized Intersection Observer
+  useEffect(() => {
+    if (!cardRef.current) return;
+
+    observerRef.current = new IntersectionObserver(
+      ([entry]) => {
+        setIsIntersecting(entry.isIntersecting);
+      },
+      {
+        threshold: 0.3,
+        rootMargin: '-50px 0px -50px 0px'
+      }
+    );
+
+    observerRef.current.observe(cardRef.current);
+
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+    };
+  }, []);
+
+  // Video event handlers with error handling
+  const handleVideoLoad = useCallback(() => {
+    setIsLoading(false);
+    setHasError(false);
+    onVideoLoad?.(video.id);
+  }, [video.id, onVideoLoad]);
+
+  const handleVideoError = useCallback(() => {
+    setIsLoading(false);
+    setHasError(true);
+    onVideoError?.(video.id);
+  }, [video.id, onVideoError]);
+
+  const handlePlay = useCallback(() => setIsPlaying(true), []);
+  const handlePause = useCallback(() => setIsPlaying(false), []);
+
+  // Setup video events
+  useEffect(() => {
+    const videoElement = videoRef.current;
+    if (!videoElement) return;
+
+    videoElement.addEventListener('loadeddata', handleVideoLoad);
+    videoElement.addEventListener('error', handleVideoError);
+    videoElement.addEventListener('play', handlePlay);
+    videoElement.addEventListener('pause', handlePause);
+
+    return () => {
+      videoElement.removeEventListener('loadeddata', handleVideoLoad);
+      videoElement.removeEventListener('error', handleVideoError);
+      videoElement.removeEventListener('play', handlePlay);
+      videoElement.removeEventListener('pause', handlePause);
+    };
+  }, [handleVideoLoad, handleVideoError, handlePlay, handlePause]);
+
+  // Optimized video playback control
+  useEffect(() => {
+    const videoElement = videoRef.current;
+    if (!videoElement || !isActive || hasError) return;
+
+    const shouldPlay = isIntersecting && isVisible && !isTransitioning;
+
+    if (shouldPlay && videoElement.paused) {
+      const playPromise = videoElement.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // Autoplay was prevented, show play button
+          setShowPlayIcon(true);
+        });
+      }
+    } else if (!shouldPlay && !videoElement.paused) {
+      videoElement.pause();
+    }
+  }, [isActive, isIntersecting, isVisible, isTransitioning, hasError]);
+
+  // Reset video when switching
+  useEffect(() => {
+    const videoElement = videoRef.current;
+    if (videoElement && isActive) {
+      videoElement.currentTime = 0;
+    }
+  }, [index, isActive]);
+
+  const togglePlayback = useCallback(() => {
+    const videoElement = videoRef.current;
+    if (!videoElement || hasError) return;
+
+    if (videoElement.paused) {
+      videoElement.play().catch(() => {});
+    } else {
+      videoElement.pause();
+    }
+
+    // Show play/pause icon briefly
+    setShowPlayIcon(true);
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => setShowPlayIcon(false), 1000);
+  }, [hasError]);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
+
+  if (hasError) {
+    return (
+      <motion.div
+        ref={cardRef}
+        className={`${styles.videoCard} ${styles.errorCard}`}
+        variants={slideVariants}
+        initial="enter"
+        animate="center"
+        exit="exit"
+        custom={direction}
+      >
+        <div className={styles.errorContent}>
+          <div className={styles.errorIcon}>⚠️</div>
+          <h3>Video Unavailable</h3>
+          <p>This video could not be loaded</p>
+        </div>
+      </motion.div>
+    );
+  }
+
+  return (
+    <motion.div
+      ref={cardRef}
+      className={`${styles.videoCard} ${
+        video.type === 'reel' ? styles.reel : styles.landscape
+      } ${isActive ? styles.active : ''}`}
+      variants={slideVariants}
+      initial="enter"
+      animate="center"
+      exit="exit"
+      custom={direction}
+      onClick={togglePlayback}
+      style={{ zIndex: isActive ? 10 : 1 }} // Ensure proper layering
+    >
+      <div className={styles.videoContainer}>
+        <video
+          ref={videoRef}
+          className={styles.backgroundVideo}
+          poster={video.thumbnailUrl}
+          loop
+          playsInline
+          preload="metadata"
+          tabIndex={0}
+          aria-label={`${video.title} video`}
+        >
+          <source src={video.videoUrl} type="video/mp4" />
+          <source src={video.videoUrl} type="video/quicktime" />
+          Your browser does not support the video tag.
+        </video>
+
+        {/* Video Overlay */}
+        <div className={styles.videoOverlay} />
+
+        {/* Category Badge */}
+        <div className={styles.categoryBadge}>
+          {video.category}
+        </div>
+
+        {/* Format Indicator */}
+        <div className={styles.formatIndicator}>
+          <span className={styles.formatBadge}>
+            {video.type === 'reel' ? 'REEL' : 'LANDSCAPE'}
+          </span>
+        </div>
+
+        {/* Loading State */}
+        {isLoading && (
+          <div className={styles.loadingOverlay}>
+            <div className={styles.loadingSpinner} />
+          </div>
+        )}
+
+        {/* Play/Pause Icon */}
+        {showPlayIcon && (
+          <motion.div
+            className={styles.playIcon}
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.2 }}
+            transition={{ duration: 0.3 }}
+          >
+            {isPlaying ? <FaPause /> : <FaPlay />}
+          </motion.div>
+        )}
+
+        {/* Volume Indicator */}
+        {isPlaying && isIntersecting && (
+          <div className={styles.volumeIndicator}>
+            <FaVolumeUp />
+          </div>
+        )}
+
+        {/* Active Indicator */}
+        {isActive && (
+          <div className={styles.activeIndicator} />
+        )}
+      </div>
+    </motion.div>
+  );
+});
+
+VideoCard.displayName = 'VideoCard';
 export default VideoCard;

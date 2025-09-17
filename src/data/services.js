@@ -14,7 +14,8 @@ export const services = [
       "Custom CMS"
     ],
     technologies: ["React", "Vue.js", "Node.js", "MongoDB", "PostgreSQL"],
-    pricing: "Starting from 500 TND"
+    pricing: "Starting from 500 TND",
+    MostPopular: false
   },
   {
     id: 3,
@@ -30,7 +31,8 @@ export const services = [
       "Offline Functionality"
     ],
     technologies: ["React Native", "Flutter", "Swift", "Kotlin"],
-    pricing: "Starting from 700 TND"
+    pricing: "Starting from 700 TND",
+    MostPopular: false
   },
   {
     id: 2,
@@ -46,7 +48,8 @@ export const services = [
       "Influencer Marketing"
     ],
     technologies: ["Google Analytics", "Facebook Ads", "Google Ads", "Mailchimp"],
-    pricing: "Starting from 550 TND"
+    pricing: "Starting from 550 TND",
+    MostPopular: true
   },
   {
     id: 4,
@@ -62,7 +65,8 @@ export const services = [
       "Brand Identity"
     ],
     technologies: ["Figma", "Adobe XD", "Sketch", "Principle"],
-    pricing: "Starting from 750 TND"
+    pricing: "Starting from 750 TND",
+    MostPopular: false
   },
   {
     id: 5,
@@ -78,7 +82,8 @@ export const services = [
       "Live Streaming"
     ],
     technologies: ["Adobe Premiere", "After Effects", "DaVinci Resolve"],
-    pricing: "Starting from 250 TND"
+    pricing: "Starting from 250 TND",
+    MostPopular: false
   },
   {
     id: 6,
@@ -94,6 +99,7 @@ export const services = [
       "Email Hosting"
     ],
     technologies: ["AWS", "DigitalOcean", "Cloudflare"],
-    pricing: "Starting from 350 TND"
+    pricing: "Starting from 350 TND",
+    MostPopular: false
   }
 ];

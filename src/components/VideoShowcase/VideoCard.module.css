@@ -1,4 +1,5 @@
 /* src/components/VideoShowcase/VideoCard.module.css */
+
 .videoCard {
     position: relative;
     width: 100%;
@@ -7,6 +8,7 @@
     overflow: hidden;
     cursor: pointer;
     background: rgba(255, 255, 255, 0.05);
+    -webkit-backdrop-filter: blur(25px);
     backdrop-filter: blur(25px);
     border: 1px solid rgba(193, 45, 224, 0.2);
     box-shadow:
@@ -55,6 +57,9 @@
     object-fit: cover;
     transition: transform 0.3s ease;
     cursor: pointer;
+    will-change: transform;
+    transform: translateZ(0);
+    /* Hardware acceleration */
 }
 
 .videoCard:hover .backgroundVideo {
@@ -88,6 +93,7 @@
     text-transform: uppercase;
     z-index: 20;
     box-shadow: 0 4px 15px rgba(193, 45, 224, 0.4);
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
 }
 
@@ -107,6 +113,7 @@
     font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
 }
@@ -128,6 +135,29 @@
     color: white;
     font-size: 2rem;
     z-index: 25;
+    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(15px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Play icon improvements */
+.playIcon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2rem;
+    z-index: 25;
+    -webkit-backdrop-filter: blur(15px);
     backdrop-filter: blur(15px);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
@@ -138,6 +168,7 @@
     bottom: 1.5rem;
     left: 1.5rem;
     z-index: 20;
+    transition: all 0.3s ease;
 }
 
 .volumeBars {
@@ -208,7 +239,8 @@
     align-items: center;
     justify-content: center;
     z-index: 30;
-    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
 }
 
 .loadingSpinner {
@@ -221,13 +253,96 @@
 }
 
 @keyframes spin {
-    0% {
+    from {
         transform: rotate(0deg);
     }
 
-    100% {
+    to {
         transform: rotate(360deg);
     }
+}
+
+/* Error handling styles */
+.errorCard {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+.errorContent {
+    text-align: center;
+    color: rgba(239, 68, 68, 0.8);
+}
+
+.errorIcon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+/* Performance optimizations */
+.videoCard {
+    will-change: transform, opacity;
+    transform: translateZ(0);
+}
+
+/* Thumbnail improvements */
+.loadedIndicator {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 8px;
+    height: 8px;
+    background: #22c55e;
+    border-radius: 50%;
+}
+
+.errorThumb {
+    opacity: 0.5;
+    border-color: rgba(239, 68, 68, 0.5) !important;
+}
+
+/* Debug indicator (development only) */
+.debugIndicator {
+    position: absolute;
+    top: 4rem;
+    left: 1.5rem;
+    z-index: 30;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.inView {
+    color: #22c55e;
+    background: rgba(34, 197, 94, 0.2);
+    padding: 0.2rem 0.6rem;
+    border-radius: 10px;
+    border: 1px solid rgba(34, 197, 94, 0.4);
+}
+
+.outOfView {
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.2);
+    padding: 0.2rem 0.6rem;
+    border-radius: 10px;
+    border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+/* Focus states for accessibility */
+.backgroundVideo:focus {
+    outline: 2px solid rgba(193, 45, 224, 0.8);
+    outline-offset: -2px;
+}
+
+/* Smooth transitions for all interactive elements */
+.categoryBadge,
+.formatBadge,
+.transientIcon,
+.volumeIndicator,
+.activeIndicator {
+    transition: all 0.3s ease;
 }
 
 /* Responsive Design */
@@ -258,7 +373,8 @@
         font-size: 0.65rem;
     }
 
-    .transientIcon {
+    .transientIcon,
+    .playIcon {
         width: 60px;
         height: 60px;
         font-size: 1.5rem;
@@ -278,6 +394,20 @@
         right: 1rem;
         width: 10px;
         height: 10px;
+    }
+
+    .debugIndicator {
+        top: 3rem;
+        left: 1rem;
+        font-size: 0.6rem;
+    }
+
+    .videoCard {
+        transform: translate3d(0, 0, 0);
+    }
+
+    .backgroundVideo {
+        transform: translate3d(0, 0, 0);
     }
 }
 
@@ -308,7 +438,8 @@
         font-size: 0.6rem;
     }
 
-    .transientIcon {
+    .transientIcon,
+    .playIcon {
         width: 50px;
         height: 50px;
         font-size: 1.2rem;
@@ -333,21 +464,12 @@
         width: 8px;
         height: 8px;
     }
-}
 
-/* Focus states for accessibility */
-.backgroundVideo:focus {
-    outline: 2px solid rgba(193, 45, 224, 0.8);
-    outline-offset: -2px;
-}
-
-/* Smooth transitions for all interactive elements */
-.categoryBadge,
-.formatBadge,
-.transientIcon,
-.volumeIndicator,
-.activeIndicator {
-    transition: all 0.3s ease;
+    .debugIndicator {
+        top: 2.5rem;
+        left: 0.8rem;
+        font-size: 0.55rem;
+    }
 }
 
 /* Hover effects for mobile touch devices */
@@ -358,60 +480,5 @@
 
     .videoCard:active {
         transform: scale(0.98);
-    }
-}
-
-/* Add these styles to your existing VideoCard.module.css */
-
-/* Debug indicator (development only) */
-.debugIndicator {
-    position: absolute;
-    top: 4rem;
-    left: 1.5rem;
-    z-index: 30;
-    font-size: 0.7rem;
-    font-weight: 600;
-    text-transform: uppercase;
-}
-
-.inView {
-    color: #22c55e;
-    background: rgba(34, 197, 94, 0.2);
-    padding: 0.2rem 0.6rem;
-    border-radius: 10px;
-    border: 1px solid rgba(34, 197, 94, 0.4);
-}
-
-.outOfView {
-    color: #ef4444;
-    background: rgba(239, 68, 68, 0.2);
-    padding: 0.2rem 0.6rem;
-    border-radius: 10px;
-    border: 1px solid rgba(239, 68, 68, 0.4);
-}
-
-/* Enhanced volume indicator with conditional display */
-.volumeIndicator {
-    position: absolute;
-    bottom: 1.5rem;
-    left: 1.5rem;
-    z-index: 20;
-    transition: all 0.3s ease;
-}
-
-/* Improved responsive behavior for intersection observer */
-@media (max-width: 768px) {
-    .debugIndicator {
-        top: 3rem;
-        left: 1rem;
-        font-size: 0.6rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .debugIndicator {
-        top: 2.5rem;
-        left: 0.8rem;
-        font-size: 0.55rem;
     }
 }

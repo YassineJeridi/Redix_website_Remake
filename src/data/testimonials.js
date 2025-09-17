@@ -1,5 +1,22 @@
 // src/data/testimonials.js
 
+const testimonialsImages = {
+  Mahdi_Ben_Mabrouk: "assets/testimonials/Mahdi_Ben_Mabrouk.png",
+  sabri_zoghlemi: "assets/testimonials/sabri_zoghlemi.jpg",
+  dr_moetaz_alhousayni: "assets/testimonials/dr_moetaz_alhousayni.jpg",
+  Khairi_Hammami: "assets/testimonials/Khairi_Hammami.jpg",
+  Walid_Ben_Ali: "assets/testimonials/Walid_Ben_Ali.png",
+  Maram_Mahrouk: "assets/testimonials/Maram_Mahrouk.jpg",
+  Yosra_Klai: "assets/testimonials/Yosra_Klaï.jpg",
+  Beha_Aroua: "assets/testimonials/Beha_Aroua.jpg",
+  ayoub_dabbabi: "assets/testimonials/ayoub_dabbabi.jpg",
+  yassine_hizaoui: "assets/testimonials/yassine_hizaoui.jpg",
+  nour_gaddes: "assets/testimonials/nour_gaddes.jpg",
+  koussay_boubaker: "assets/testimonials/koussay_boubaker.jpg",
+  mahdi_said: "assets/testimonials/mahdi_said.jpg",
+  amir_zanned: "assets/testimonials/amir_zanned.jpg",
+};
+
 export const testimonials = [
   {
     id: 1,
@@ -7,7 +24,7 @@ export const testimonials = [
     author: "Mahdi Ben Mabrouk",
     position: "Frita CEO",
     service: "Brand Management & Marketing",
-    image: "/assets/testimonials/Mahdi_Ben_Mabrouk.png",
+    image: testimonialsImages.Mahdi_Ben_Mabrouk,
     company: "Frita",
     rating: 5
   },
@@ -17,7 +34,7 @@ export const testimonials = [
     author: "Sabri Zoghlami",
     position: "DR and EFPHQ Director",
     service: "Management Marketing",
-    image: "/assets/testimonials/sabri_zoghlemi.jpg",
+    image: testimonialsImages.sabri_zoghlemi,
     company: "EFPHQ Tunisia",
     rating: 4
   },
@@ -27,7 +44,7 @@ export const testimonials = [
     author: "Dr. Moetaz Alhousayni",
     position: "Teeth Doctor",
     service: "Content Creation",
-    image: "/assets/testimonials/dr_moetaz_alhousayni.jpg",
+    image: testimonialsImages.dr_moetaz_alhousayni,
     company: "Private Practice",
     rating: 5
   },
@@ -37,7 +54,7 @@ export const testimonials = [
     author: "Khairi Hammami",
     position: "FLAYES CTO",
     service: "Brand Management",
-    image: "/assets/testimonials/Khairi_Hammami.jpg",
+    image: testimonialsImages.Khairi_Hammami,
     company: "Flayes",
     rating: 5
   },
@@ -47,7 +64,7 @@ export const testimonials = [
     author: "Walid Ben Ali",
     position: "Frita Product Quality Manager",
     service: "Brand Management & Marketing",
-    image: "/assets/testimonials/Walid_Ben_Ali.png",
+    image: testimonialsImages.Walid_Ben_Ali,
     company: "Frita",
     rating: 5
   },
@@ -57,7 +74,7 @@ export const testimonials = [
     author: "Maram Mahrouk",
     position: "AIESEC OCP President",
     service: "Event Showcasing",
-    image: "/assets/testimonials/Maram_Mahrouk.jpg",
+    image: testimonialsImages.Maram_Mahrouk,
     company: "AIESEC",
     rating: 5
   },
@@ -67,7 +84,7 @@ export const testimonials = [
     author: "Yosra Klaï",
     position: "JCI President",
     service: "Event Showcasing",
-    image: "/assets/testimonials/Yosra_Klaï.jpg",
+    image: testimonialsImages.Yosra_Klai,
     company: "JCI Manouba",
     rating: 5
   },
@@ -77,7 +94,7 @@ export const testimonials = [
     author: "Beha Aroua",
     position: "ESEN Ambassadors",
     service: "Community Engagement",
-    image: "/assets/testimonials/Beha_Aroua.jpg",
+    image: testimonialsImages.Beha_Aroua,
     company: "ESEN",
     rating: 5
   },
@@ -87,7 +104,7 @@ export const testimonials = [
     author: "Ayoub Dabbabi",
     position: "Responsable logistique du club ESEN Ambassadors",
     service: "Event Management",
-    image: "/assets/testimonials/ayoub_dabbabi.jpg",
+    image: testimonialsImages.ayoub_dabbabi,
     company: "ESEN Ambassadors",
     rating: 5
   },
@@ -97,7 +114,7 @@ export const testimonials = [
     author: "Yassine Hizaoui",
     position: "Client",
     service: "E-commerce Development",
-    image: "/assets/testimonials/yassine_hizaoui.jpg",
+    image: testimonialsImages.yassine_hizaoui,
     company: "Independent",
     rating: 5
   },
@@ -107,7 +124,7 @@ export const testimonials = [
     author: "Nour Gaddes",
     position: "Cheffe marketing in club ESEN Ambassadors",
     service: "Event Preparation",
-    image: "/assets/testimonials/nour_gaddes.jpg",
+    image: testimonialsImages.nour_gaddes,
     company: "ESEN Ambassadors",
     rating: 5
   },
@@ -117,7 +134,7 @@ export const testimonials = [
     author: "Koussay Boubaker",
     position: "Responsable marketing JCI",
     service: "Event Marketing",
-    image: "/assets/testimonials/koussay_boubaker.jpg",
+    image: testimonialsImages.koussay_boubaker,
     company: "JCI",
     rating: 5
   },
@@ -127,7 +144,7 @@ export const testimonials = [
     author: "Mahdi Said",
     position: "Product Manager",
     service: "Brand Marketing Strategy",
-    image: "/assets/testimonials/mahdi_said.jpg",
+    image: testimonialsImages.mahdi_said,
     company: "Flayes",
     rating: 5
   },
@@ -137,7 +154,7 @@ export const testimonials = [
     author: "Amir Zanned",
     position: "Developer",
     service: "Development Collaboration",
-    image: "/assets/testimonials/amir_zanned.jpg",
+    image: testimonialsImages.amir_zanned,
     company: "Freelance Developer",
     rating: 5
   }
