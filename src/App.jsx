@@ -1,41 +1,43 @@
-// src/App.jsx
 import './styles/global.css';
-import GlobalBackground from './components/GlobalBackground/GlobalBackground';
-
-// Import all your components
-import Navbar from './components/Navbar/Navbar';
-import Banner from './components/Banner/Banner';
-import WhyChooseUs from './components/WhyChooseUs/WhyChooseUs';
-import Testimonials from './components/Testimonials/Testimonials';
-import Services from './components/Services/Services';
-import VideoShowcase from './components/VideoShowcase/VideoShowcase';
-import DevProject from './components/DevProject/DevProject';
-import TrustedBy from './components/TrustedBy/TrustedBy';
-import BookCall from './components/BookCall/BookCall';
-import Footer from './components/Footer/Footer';
+// src/App.jsx
+import { useState } from 'react';
+import Home from './pages/Home';
 import ChatPopup from './components/ChatPopup/ChatPopup';
+import GlobalBackground from './components/GlobalBackground/GlobalBackground';
+import Navbar from './components/Navbar/Navbar';
+import Footer from './components/Footer/Footer';
+import './App.css';
 
 function App() {
+  const [isChatOpen, setIsChatOpen] = useState(false);
+
+  const openChat = () => setIsChatOpen(true);
+  const closeChat = () => setIsChatOpen(false);
+
   return (
-    <GlobalBackground>
-      <Navbar />
-      <Banner />
-      <WhyChooseUs />
-
-      <Services />
-
-      <BookCall />
-      <VideoShowcase />
-      <DevProject />
-      <BookCall />
-
-
-      <Testimonials />
-      <TrustedBy />
-
-      <Footer />
-      <ChatPopup />
-    </GlobalBackground>
+    <div className="App">
+      <GlobalBackground>
+      <Navbar/>
+      <Home />
+      <Footer/> 
+      
+      
+      {/* Chat Button */}
+      <button 
+        className="chat-button"
+        onClick={openChat}
+        aria-label="Open chat"
+      >
+        💬
+      </button>
+      
+      {/* Chat Popup - Only renders when isOpen is true */}
+      <ChatPopup 
+        isOpen={isChatOpen} 
+        onClose={closeChat} 
+      />
+      </GlobalBackground>
+    </div>
   );
 }
 

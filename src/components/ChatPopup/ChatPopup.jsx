@@ -1,149 +1,160 @@
 // src/components/ChatPopup/ChatPopup.jsx
-import { useState, useEffect } from 'react';
-import { sendTelegramMessage } from '../../services/telegramService';
+import { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaTimes, FaPaperPlane, FaCheck, FaExclamationTriangle } from 'react-icons/fa';
 import styles from './ChatPopup.module.css';
 
-const ChatPopup = () => {
-  const [isOpen, setIsOpen] = useState(false);
+const ChatPopup = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     message: '',
-    service: ''
+    phone: ''
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState('');
+  const [status, setStatus] = useState('idle');
 
-  const services = [
-    'Web Development',
-    'Mobile Development', 
-    'Digital Marketing',
-    'UI/UX Design',
-    'Video Production',
-    'Hosting Services'
-  ];
-
-  const handleInputChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
+  // Early return - don't render anything if not open
+  if (!isOpen) {
+    return null;
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
+    setStatus('sending');
     
-    const message = `
-🔥 NEW CONTACT FROM REDIX WEBSITE:
+    // Simulate API call
+    setTimeout(() => {
+      setStatus('success');
+      setTimeout(() => {
+        onClose();
+        setStatus('idle');
+        setFormData({ name: '', email: '', message: '', phone: '' });
+      }, 2000);
+    }, 1500);
+  };
 
-👤 Name: ${formData.name}
-📧 Email: ${formData.email}
-🛠️ Service: ${formData.service}
-💬 Message: ${formData.message}
-
-Time: ${new Date().toLocaleString()}
-    `;
-
-    try {
-      const success = await sendTelegramMessage(message);
-      if (success) {
-        setSubmitStatus('success');
-        setFormData({ name: '', email: '', message: '', service: '' });
-        setTimeout(() => {
-          setIsOpen(false);
-          setSubmitStatus('');
-        }, 2000);
-      } else {
-        setSubmitStatus('error');
-      }
-    } catch (error) {
-      setSubmitStatus('error');
-    }
-    
-    setIsSubmitting(false);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
   return (
-    <>
-      <div className={`${styles.chatButton} ${isOpen ? styles.active : ''}`} onClick={() => setIsOpen(!isOpen)}>
-        {isOpen ? '✕' : '💬'}
-      </div>
+    <AnimatePresence>
+      <motion.div
+        className={styles.backdrop}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={onClose}
+      >
+        <motion.div
+          className={styles.popup}
+          initial={{ opacity: 0, scale: 0.8, y: 50 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.8, y: 50 }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className={styles.header}>
+            <h3>Contact Us</h3>
+            <button className={styles.closeBtn} onClick={onClose}>
+              <FaTimes />
+            </button>
+          </div>
 
-      <div className={`${styles.chatPopup} ${isOpen ? styles.open : ''}`}>
-        <div className={styles.chatHeader}>
-          <h3>Get in Touch</h3>
-          <p>Let's discuss your project</p>
-        </div>
+          <div className={styles.content}>
+            {status === 'idle' || status === 'sending' ? (
+              <form onSubmit={handleSubmit} className={styles.form}>
+                <div className={styles.inputGroup}>
+                  <input
+                    type="text"
+                    name="name"
+                    placeholder="Your Name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                    className={styles.input}
+                  />
+                </div>
 
-        <form className={styles.chatForm} onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="name"
-            placeholder="Your Name"
-            value={formData.name}
-            onChange={handleInputChange}
-            required
-            className={styles.input}
-          />
-          
-          <input
-            type="email"
-            name="email"
-            placeholder="Your Email"
-            value={formData.email}
-            onChange={handleInputChange}
-            required
-            className={styles.input}
-          />
-          
-          <select
-            name="service"
-            value={formData.service}
-            onChange={handleInputChange}
-            required
-            className={styles.select}
-          >
-            <option value="">Select a Service</option>
-            {services.map((service, index) => (
-              <option key={index} value={service}>{service}</option>
-            ))}
-          </select>
-          
-          <textarea
-            name="message"
-            placeholder="Tell us about your project..."
-            value={formData.message}
-            onChange={handleInputChange}
-            required
-            className={styles.textarea}
-            rows="4"
-          />
-          
-          <button 
-            type="submit" 
-            className={styles.submitBtn}
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? 'Sending...' : 'Send Message'}
-          </button>
-          
-          {submitStatus === 'success' && (
-            <div className={styles.successMessage}>
-              ✅ Message sent successfully!
-            </div>
-          )}
-          
-          {submitStatus === 'error' && (
-            <div className={styles.errorMessage}>
-              ❌ Failed to send message. Please try again.
-            </div>
-          )}
-        </form>
-      </div>
+                <div className={styles.inputGroup}>
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="Your Email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    className={styles.input}
+                  />
+                </div>
 
-      {isOpen && <div className={styles.overlay} onClick={() => setIsOpen(false)} />}
-    </>
+                <div className={styles.inputGroup}>
+                  <input
+                    type="tel"
+                    name="phone"
+                    placeholder="Phone Number (Optional)"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    className={styles.input}
+                  />
+                </div>
+
+                <div className={styles.inputGroup}>
+                  <textarea
+                    name="message"
+                    placeholder="Your Message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    required
+                    rows="4"
+                    className={styles.textarea}
+                  />
+                </div>
+
+                <button 
+                  type="submit" 
+                  disabled={status === 'sending'}
+                  className={styles.submitBtn}
+                >
+                  {status === 'sending' ? (
+                    <>
+                      <div className={styles.spinner}></div>
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <FaPaperPlane />
+                      Send Message
+                    </>
+                  )}
+                </button>
+              </form>
+            ) : status === 'success' ? (
+              <div className={styles.successMessage}>
+                <FaCheck className={styles.successIcon} />
+                <h4>Message Sent Successfully!</h4>
+                <p>Thank you for contacting us. We'll get back to you soon.</p>
+              </div>
+            ) : (
+              <div className={styles.errorMessage}>
+                <FaExclamationTriangle className={styles.errorIcon} />
+                <h4>Something went wrong</h4>
+                <p>Please try again or contact us directly.</p>
+                <button 
+                  onClick={() => setStatus('idle')} 
+                  className={styles.retryBtn}
+                >
+                  Try Again
+                </button>
+              </div>
+            )}
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
   );
 };
 
