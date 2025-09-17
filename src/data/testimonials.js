@@ -140,12 +140,12 @@ export const testimonials = [
   },
   {
     id: 13,
-    text: "En tant que Product Manager chez Flayes, j'ai été impressionné par l'approche stratégique de Redix. Ils ont su aligner parfaitement notre vision produit avec une stratégie marketing efficace.",
+    text: "ROAR's voice is now being heard. Thank you for the incredible strategy and execution that has our brand truly living up to its name. We're thrilled with the results.",
     author: "Mahdi Said",
-    position: "Product Manager",
+    position: "founder of Roar",
     service: "Brand Marketing Strategy",
     image: testimonialsImages.mahdi_said,
-    company: "Flayes",
+    company: "Roar",
     rating: 5
   },
   {

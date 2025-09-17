@@ -101,5 +101,22 @@ export const services = [
     technologies: ["AWS", "DigitalOcean", "Cloudflare"],
     pricing: "Starting from 350 TND",
     MostPopular: false
+  },
+  {
+    id: 7,
+    title: "Graphic Design",
+    description: "Creative and visually stunning designs for your brand",
+    icon: "🎨",
+    features: [
+      "Logo Design",
+      "Brand Identity",
+      "Marketing Materials",
+      "Social Media Graphics",
+      "Infographics",
+      "Packaging Design"
+    ],
+    technologies: [ "Adobe Photoshop", "Illustrator", "InDesign" ],
+    pricing: "Starting from 300 TND",
+    MostPopular: false
   }
 ];
