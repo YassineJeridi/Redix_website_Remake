@@ -1,0 +1,305 @@
+/* src/components/Services/ServiceCard.module.css */
+.serviceCard {
+  position: absolute;
+  width: 380px;
+  height: 520px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(193, 45, 224, 0.2);
+  border-radius: 28px;
+  padding: 2.5rem;
+  backdrop-filter: blur(25px);
+  cursor: pointer;
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform-style: preserve-3d;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+  overflow: hidden;
+}
+
+.serviceCard.active {
+  border-color: rgba(193, 45, 224, 0.5);
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 
+    0 35px 70px rgba(193, 45, 224, 0.25),
+    0 0 0 1px rgba(193, 45, 224, 0.2) inset;
+}
+
+.serviceCard.popular {
+  border-color: rgba(255, 215, 0, 0.4);
+}
+
+.badge {
+  position: absolute;
+  top: -8px;
+  right: 20px;
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  color: #1a1a1a;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+  z-index: 10;
+}
+
+.starIcon {
+  font-size: 0.65rem;
+  color: #ff6b00;
+}
+
+.cardGlow {
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  border-radius: 31px;
+  opacity: 0;
+  filter: blur(25px);
+  z-index: -1;
+  transition: opacity 0.5s ease;
+}
+
+.serviceCard:hover .cardGlow,
+.serviceCard.active .cardGlow {
+  opacity: 0.4;
+}
+
+.iconContainer {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 2rem;
+  box-shadow: 
+    0 15px 35px rgba(0, 0, 0, 0.3),
+    0 0 20px rgba(193, 45, 224, 0.3);
+  overflow: hidden;
+  transition: all 0.5s ease;
+}
+
+.iconContainer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: inherit;
+  filter: blur(15px);
+  opacity: 0.8;
+  z-index: -1;
+}
+
+.serviceIcon {
+  font-size: 2.5rem;
+  color: white;
+  z-index: 2;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+  transition: all 0.3s ease;
+}
+
+.iconRipple {
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 27px;
+  z-index: 1;
+  animation: ripple 3s ease-in-out infinite;
+}
+
+@keyframes ripple {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.3;
+  }
+}
+
+.serviceContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.serviceTitle {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 1.2rem 0;
+  line-height: 1.3;
+}
+
+.serviceDescription {
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.6;
+  margin: 0 0 2rem 0;
+  font-size: 1rem;
+  font-weight: 300;
+  flex-grow: 1;
+}
+
+.featuresList {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem 0;
+  text-align: left;
+}
+
+.featureItem {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 0.8rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+  padding: 0.3rem 0;
+}
+
+.checkIcon {
+  color: var(--primary-color, #c12de0);
+  font-size: 0.8rem;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 5px rgba(193, 45, 224, 0.5));
+}
+
+.pricingSection {
+  margin-bottom: 2rem;
+}
+
+.pricing {
+  background: rgba(193, 45, 224, 0.15);
+  color: var(--primary-color, #c12de0);
+  padding: 0.8rem 1.5rem;
+  border-radius: 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  display: inline-block;
+  border: 1px solid rgba(193, 45, 224, 0.3);
+  backdrop-filter: blur(15px);
+}
+
+.ctaButton {
+  background: linear-gradient(135deg, #c12de0 0%, #e856ff 100%);
+  border: none;
+  border-radius: 16px;
+  padding: 1rem 2rem;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 25px rgba(193, 45, 224, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.ctaButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.6s ease;
+}
+
+.ctaButton:hover::before {
+  left: 100%;
+}
+
+.ctaButton:hover {
+  box-shadow: 0 12px 35px rgba(193, 45, 224, 0.4);
+  transform: translateY(-2px);
+}
+
+.arrowIcon {
+  font-size: 0.9rem;
+  transition: transform 0.3s ease;
+}
+
+.ctaButton:hover .arrowIcon {
+  transform: translateX(3px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .serviceCard {
+    width: 320px;
+    height: 450px;
+    padding: 2rem;
+  }
+
+  .iconContainer {
+    width: 75px;
+    height: 75px;
+    margin-bottom: 1.5rem;
+  }
+
+  .serviceIcon {
+    font-size: 2rem;
+  }
+
+  .serviceTitle {
+    font-size: 1.4rem;
+  }
+
+  .serviceDescription {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .serviceCard {
+    width: 290px;
+    height: 420px;
+    padding: 1.8rem;
+  }
+
+  .iconContainer {
+    width: 70px;
+    height: 70px;
+  }
+
+  .serviceIcon {
+    font-size: 1.8rem;
+  }
+
+  .serviceTitle {
+    font-size: 1.3rem;
+  }
+}
+
+/* Performance Optimizations */
+@media (prefers-reduced-motion: reduce) {
+  .iconRipple,
+  .ctaButton::before {
+    animation: none !important;
+  }
+  
+  .serviceCard,
+  .iconContainer {
+    transition: none !important;
+  }
+}
