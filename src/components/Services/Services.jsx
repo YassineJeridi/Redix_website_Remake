@@ -1,44 +1,36 @@
 // src/components/Services/Services.jsx
 import { useRef, useState, useCallback, useMemo, useEffect } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { motion, useInView, AnimatePresence } from 'framer-motion';
 import {
-  FaCode, FaMobile, FaChartLine, FaPalette, FaVideo, FaCloud,
-  FaArrowRight, FaCheck, FaStar, FaRocket
+  FaCode, FaMobile, FaChartLine, FaPencilRuler, FaVideo, FaCloud,
+  FaChevronLeft, FaChevronRight
 } from 'react-icons/fa';
 import { services } from '../../data/services';
-import ServicesChatPopup from '../ServicesChatPopup/ServicesChatPopup';
+import ServiceCard from './ServiceCard';
+import ServicesChatPopup from './ServicesChatPopup/ServicesChatPopup';
 import styles from './Services.module.css';
 
 const Services = () => {
   const sectionRef = useRef(null);
-  const isInView = useInView(sectionRef, { once: true, amount: 0.1 });
-
-  const [isMobile, setIsMobile] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [isChatOpen, setIsChatOpen] = useState(false);
+  const carouselRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
+  
   const [selectedService, setSelectedService] = useState(null);
+  const [showChatPopup, setShowChatPopup] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
-  // Icon mappings
+  // Icon mappings for services - Updated Graphic Design icon
   const iconMap = useMemo(() => ({
-    1: FaCode,
-    2: FaChartLine,
-    3: FaMobile,
-    4: FaPalette,
-    5: FaVideo,
-    6: FaCloud
+    1: FaCode, // Web Development
+    2: FaChartLine, // Digital Marketing  
+    3: FaMobile, // Mobile App
+    4: FaPencilRuler, // Graphic Design - Updated icon
+    5: FaVideo, // Video Production
+    6: FaCloud // E-commerce
   }), []);
 
-  // Reorder services - Digital Marketing in middle for BOTH desktop and mobile
-  const orderedServices = useMemo(() => {
-    const digitalMarketing = services.find(s => s.id === 2);
-    const others = services.filter(s => s.id !== 2);
-    const middle = Math.floor(others.length / 2);
-    
-    // Same arrangement for both desktop and mobile - Digital Marketing in center
-    return [...others.slice(0, middle), digitalMarketing, ...others.slice(middle)];
-  }, []);
-
-  // Enhanced services with gradients and styling
+  // Enhanced services with styling data - Popular service centered
   const enhancedServices = useMemo(() => {
     const gradients = {
       1: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
@@ -48,16 +40,39 @@ const Services = () => {
       5: "linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)",
       6: "linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)"
     };
+
+    const highlights = {
+      2: 'Most Popular',
+      1: 'Best Value',
+      5: 'Creative',
+    };
+
+    // Reorder services to put popular service (id=2) in the center
+    let orderedServices = [...services];
+    const popularServiceIndex = orderedServices.findIndex(s => s.id === 2);
     
+    if (popularServiceIndex > -1) {
+      const popularService = orderedServices.splice(popularServiceIndex, 1)[0];
+      const centerIndex = Math.floor(orderedServices.length / 2);
+      orderedServices.splice(centerIndex, 0, popularService);
+    }
+
     return orderedServices.map(service => ({
       ...service,
       icon: iconMap[service.id] || FaCode,
-      popular: service.id === 2,
-      gradient: gradients[service.id] || gradients[1]
+      gradient: gradients[service.id],
+      highlight: highlights[service.id],
+      isPopular: service.id === 2
     }));
-  }, [orderedServices, iconMap]);
+  }, [iconMap]);
 
-  // Mobile detection with resize listener
+  // Set default activeIndex to center where popular service is
+  const [activeIndex, setActiveIndex] = useState(() => {
+    const popularIndex = enhancedServices.findIndex(s => s.isPopular);
+    return popularIndex > -1 ? popularIndex : Math.floor(enhancedServices.length / 2);
+  });
+
+  // Mobile detection
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth <= 768);
     checkMobile();
@@ -65,34 +80,39 @@ const Services = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Initialize activeIndex - always start with middle (Digital Marketing)
-  useEffect(() => {
-    if (enhancedServices.length > 0) {
-      const middleIndex = Math.floor(enhancedServices.length / 2);
-      setActiveIndex(middleIndex);
-    }
-  }, [enhancedServices.length]);
+  // Helper function for indicator labels
+  const getIndicatorLabel = (serviceTitle) => {
+    const firstWord = serviceTitle.split(' ')[0];
+    
+    const labelMap = {
+      "Digital": "Marketing",
+      "Graphic": "Graphic Design", 
+      "Video": "Video Production"
+    };
+    
+    return labelMap[firstWord] || firstWord;
+  };
 
-  // Enhanced looping transform calculation
-  const getLoopingTransform = useCallback((index, activeIndex, total) => {
-    // Calculate distance with looping logic
+  // Enhanced 3D Transform calculations with increased gaps and reduced back opacity
+  const getTransform = useCallback((index, activeIndex, total) => {
     let distance = index - activeIndex;
     
-    // Handle looping: choose shortest path
-    if (distance > total / 2) {
-      distance = distance - total;
-    } else if (distance < -total / 2) {
-      distance = distance + total;
-    }
+    // Handle circular positioning
+    if (distance > total / 2) distance -= total;
+    else if (distance < -total / 2) distance += total;
 
     const absDistance = Math.abs(distance);
+    const rotateY = distance * (isMobile ? -5 : -12);
     
-    // 3D transform values with smooth transitions
-    const rotateY = distance * -10;
-    const translateX = distance * (isMobile ? 280 : 320);
-    const translateZ = absDistance === 0 ? 0 : -60 - (absDistance * 30);
+    // Mobile-optimized gaps
+    const baseGap = isMobile ? 320 : 420;
+    const translateX = distance * baseGap;
+    
+    const translateZ = absDistance === 0 ? 0 : -50 - (absDistance * 40);
     const scale = absDistance === 0 ? 1 : Math.max(0.8, 1 - (absDistance * 0.12));
-    const opacity = Math.max(0.2, 1 - (absDistance * 0.25));
+    
+    // Reduced opacity for back cards
+    const opacity = absDistance === 0 ? 1 : Math.max(0.2, 1 - (absDistance * 0.5));
 
     return {
       rotateY,
@@ -105,315 +125,173 @@ const Services = () => {
     };
   }, [isMobile]);
 
-  // Enhanced card selection with looping navigation
-  const selectCard = useCallback((index) => {
-    if (index === activeIndex) {
-      // If clicking active card, open chat
-      setSelectedService(enhancedServices[index]);
-      setIsChatOpen(true);
-      if (navigator.vibrate) navigator.vibrate(50);
-    } else {
-      // Navigate to selected card
-      setActiveIndex(index);
-      if (navigator.vibrate && isMobile) navigator.vibrate(30);
-    }
-  }, [activeIndex, enhancedServices, isMobile]);
+  // Navigation functions
+  const navigateToService = useCallback((index) => {
+    if (isTransitioning) return;
 
-  // Enhanced drag handling with looping
+    setIsTransitioning(true);
+    setActiveIndex(index);
+    setTimeout(() => setIsTransitioning(false), 300);
+  }, [isTransitioning]);
+
+  const nextService = useCallback(() => {
+    navigateToService((activeIndex + 1) % enhancedServices.length);
+  }, [activeIndex, enhancedServices.length, navigateToService]);
+
+  const prevService = useCallback(() => {
+    navigateToService((activeIndex - 1 + enhancedServices.length) % enhancedServices.length);
+  }, [activeIndex, enhancedServices.length, navigateToService]);
+
+  // Handle get quote - opens ServicesChatPopup
+  const handleGetQuote = (service) => {
+    setSelectedService(service);
+    setShowChatPopup(true);
+  };
+
+  // Touch/Drag handling for mobile
   const handleDragEnd = useCallback((event, { offset, velocity }) => {
-    const threshold = 60;
-    const velocityThreshold = 500;
-    
+    const threshold = 80;
+    const velocityThreshold = 400;
+
     if (Math.abs(offset.x) > threshold || Math.abs(velocity.x) > velocityThreshold) {
       if (offset.x > 0 || velocity.x > 0) {
-        // Drag right - go to previous (with looping)
-        setActiveIndex(prevIndex => 
-          (prevIndex - 1 + enhancedServices.length) % enhancedServices.length
-        );
+        prevService();
       } else {
-        // Drag left - go to next (with looping)
-        setActiveIndex(prevIndex => 
-          (prevIndex + 1) % enhancedServices.length
-        );
+        nextService();
       }
     }
-  }, [enhancedServices.length]);
-
-  // Keyboard navigation with looping
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (!isInView) return;
-      
-      switch (e.key) {
-        case 'ArrowLeft':
-          e.preventDefault();
-          setActiveIndex(prev => (prev - 1 + enhancedServices.length) % enhancedServices.length);
-          break;
-        case 'ArrowRight':
-          e.preventDefault();
-          setActiveIndex(prev => (prev + 1) % enhancedServices.length);
-          break;
-        case 'Enter':
-        case ' ':
-          e.preventDefault();
-          if (enhancedServices[activeIndex]) {
-            setSelectedService(enhancedServices[activeIndex]);
-            setIsChatOpen(true);
-          }
-          break;
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isInView, activeIndex, enhancedServices]);
-
-  // Chat popup handlers
-  const closeChatPopup = useCallback(() => {
-    setIsChatOpen(false);
-    setSelectedService(null);
-  }, []);
+  }, [nextService, prevService]);
 
   return (
-    <>
-      <section ref={sectionRef} className={styles.services}>
-        {/* Background Elements */}
-        <div className={styles.backgroundAnimations}>
-          <div className={styles.floatingOrbs}>
-            {[...Array(6)].map((_, i) => (
-              <motion.div
-                key={`orb-${i}`}
-                className={`${styles.orb} ${styles[`orb${i + 1}`]}`}
-                animate={{
-                  y: [-15, 15, -15],
-                  x: [-10, 10, -10],
-                  scale: [1, 1.05, 1],
-                }}
-                transition={{
-                  duration: 4 + (i * 0.3),
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-              />
-            ))}
-          </div>
-        </div>
+    <section className={styles.services} id="services" ref={sectionRef}>
+      {/* Background Effects */}
+      <div className={styles.backgroundEffects}>
+        <div className={styles.gradientOrb1} />
+        <div className={styles.gradientOrb2} />
+        <div className={styles.gradientOrb3} />
+      </div>
 
-        <div className={styles.container}>
-          {/* Header */}
-          <motion.div 
-            className={styles.header}
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8 }}
+      <div className={styles.container}>
+        {/* Header Section */}
+        <motion.div
+          className={styles.header}
+          initial={{ opacity: 0, y: 60 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+        >
+          <motion.span 
+            className={styles.sectionTag}
+            whileHover={{ scale: 1.05 }}
           >
-            <motion.div 
-              className={styles.sectionTag}
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <FaRocket className={styles.tagIcon} />
-              Our Services
-            </motion.div>
-            
-            <h2 className={styles.title}>What We Do Best</h2>
-            <p className={styles.subtitle}>
-              Click any card to explore our services • Use arrow keys or swipe to navigate
-            </p>
+            Our Services
+          </motion.span>
+          <h2 className={styles.title}>What We Do Best</h2>
+          <p className={styles.subtitle}>
+            Transforming ideas into digital excellence through innovative solutions
+            and cutting-edge technology
+          </p>
+        </motion.div>
+
+        {/* Services Container */}
+        <motion.div
+          className={styles.servicesContainer}
+          initial={{ opacity: 0, y: 40 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 1, delay: 0.3 }}
+        >
+          {/* Navigation Controls (Both Desktop & Mobile) */}
+          <motion.button
+            className={`${styles.navArrow} ${styles.navLeft} ${isMobile ? styles.mobileNav : ''}`}
+            onClick={prevService}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <FaChevronLeft />
+          </motion.button>
+          
+          <motion.button
+            className={`${styles.navArrow} ${styles.navRight} ${isMobile ? styles.mobileNav : ''}`}
+            onClick={nextService}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <FaChevronRight />
+          </motion.button>
+
+          {/* 3D Carousel Container */}
+          <motion.div
+            className={styles.cardsStack}
+            drag={isMobile ? "x" : false}
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.1}
+            onDragEnd={handleDragEnd}
+            style={{ perspective: isMobile ? 800 : 1200 }}
+            ref={carouselRef}
+          >
+            {enhancedServices.map((service, index) => {
+              const transform = getTransform(index, activeIndex, enhancedServices.length);
+              
+              return (
+                <ServiceCard
+                  key={service.id}
+                  service={service}
+                  transform={transform}
+                  onGetQuote={() => handleGetQuote(service)}
+                  isMobile={isMobile}
+                />
+              );
+            })}
           </motion.div>
 
-          {/* Enhanced 3D Looping Carousel */}
-          <div className={styles.carouselContainer}>
+          {/* Enhanced Mobile Service Indicators */}
+          <div className={styles.indicators}>
+            <div className={styles.indicatorTrack}>
+              {enhancedServices.map((service, index) => (
+                <motion.button
+                  key={index}
+                  className={`${styles.indicator} ${index === activeIndex ? styles.active : ''}`}
+                  onClick={() => navigateToService(index)}
+                  whileHover={{ scale: 1.2 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  {isMobile && (
+                    <span className={styles.indicatorLabel}>
+                      {getIndicatorLabel(service.title)}
+                    </span>
+                  )}
+                </motion.button>
+              ))}
+            </div>
+          </div>
+
+          {/* Mobile Swipe Hint */}
+          {isMobile && (
             <motion.div
-              className={styles.carouselTrack}
-              drag={isMobile ? "x" : false}
-              dragConstraints={{ left: 0, right: 0 }}
-              dragElastic={0.2}
-              dragTransition={{ bounceStiffness: 300, bounceDamping: 30 }}
-              onDragEnd={handleDragEnd}
-              style={{ perspective: 1200 }}
+              className={styles.swipeHint}
+              initial={{ opacity: 1 }}
+              animate={{ opacity: [1, 0.5, 1] }}
+              transition={{ duration: 2, repeat: 2 }}
             >
-              {enhancedServices.map((service, index) => {
-                const transform = getLoopingTransform(index, activeIndex, enhancedServices.length);
-                const IconComponent = service.icon;
-
-                return (
-                  <motion.div
-                    key={service.id}
-                    className={`${styles.serviceCard} ${service.popular ? styles.popular : ''} ${transform.isActive ? styles.active : ''}`}
-                    style={{
-                      '--service-gradient': service.gradient,
-                      zIndex: transform.zIndex
-                    }}
-                    animate={{
-                      rotateY: transform.rotateY,
-                      translateX: transform.translateX,
-                      translateZ: transform.translateZ,
-                      scale: transform.scale,
-                      opacity: transform.opacity,
-                    }}
-                    transition={{
-                      type: "spring",
-                      stiffness: 300,
-                      damping: 40,
-                      mass: 1
-                    }}
-                    onClick={() => selectCard(index)}
-                    whileHover={transform.isActive ? { 
-                      scale: transform.scale * 1.02,
-                      rotateY: transform.rotateY * 0.8 
-                    } : { 
-                      scale: transform.scale * 1.05 
-                    }}
-                    whileTap={{ scale: transform.scale * 0.95 }}
-                  >
-                    {/* Popular Badge */}
-                    {service.popular && (
-                      <motion.div 
-                        className={styles.popularBadge}
-                        initial={{ scale: 0, rotate: -10 }}
-                        animate={{ scale: 1, rotate: 0 }}
-                        transition={{ 
-                          delay: 0.3,
-                          type: "spring",
-                          stiffness: 500
-                        }}
-                      >
-                        <FaStar className={styles.starIcon} />
-                        Most Popular
-                      </motion.div>
-                    )}
-
-                    {/* Card Glow */}
-                    <div 
-                      className={styles.cardGlow}
-                      style={{ background: service.gradient }}
-                    />
-
-                    {/* Icon Container */}
-                    <motion.div 
-                      className={styles.iconContainer}
-                      style={{ background: service.gradient }}
-                      animate={transform.isActive ? {
-                        rotateY: [0, 5, -5, 0],
-                        scale: [1, 1.05, 1]
-                      } : {}}
-                      transition={{ 
-                        duration: 3, 
-                        repeat: Infinity,
-                        ease: "easeInOut"
-                      }}
-                    >
-                      <IconComponent className={styles.serviceIcon} />
-                      <div className={styles.iconRipple} />
-                    </motion.div>
-
-                    {/* Service Content */}
-                    <div className={styles.serviceContent}>
-                      <h3 className={styles.serviceTitle}>{service.title}</h3>
-                      <p className={styles.serviceDescription}>{service.description}</p>
-
-                      {/* Features - Only show for active card */}
-                      {transform.isActive && (
-                        <motion.ul 
-                          className={styles.featuresList}
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: 'auto' }}
-                          exit={{ opacity: 0, height: 0 }}
-                          transition={{ duration: 0.3 }}
-                        >
-                          {service.features.slice(0, 4).map((feature, featureIndex) => (
-                            <motion.li 
-                              key={featureIndex}
-                              className={styles.featureItem}
-                              initial={{ opacity: 0, x: -10 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              transition={{ 
-                                delay: featureIndex * 0.1,
-                                duration: 0.3
-                              }}
-                            >
-                              <FaCheck className={styles.checkIcon} />
-                              <span>{feature}</span>
-                            </motion.li>
-                          ))}
-                        </motion.ul>
-                      )}
-
-                      {/* Pricing */}
-                      <div className={styles.pricingSection}>
-                        <div className={styles.pricing}>
-                          {service.pricing}
-                        </div>
-                      </div>
-
-                      {/* CTA Button - Only for active card */}
-                      {transform.isActive && (
-                        <motion.button
-                          className={styles.ctaButton}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSelectedService(service);
-                            setIsChatOpen(true);
-                          }}
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: 10 }}
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                          transition={{ duration: 0.2 }}
-                        >
-                          <span>Get Started</span>
-                          <motion.div
-                            animate={{ x: [0, 3, 0] }}
-                            transition={{ 
-                              duration: 1.5,
-                              repeat: Infinity,
-                              ease: "easeInOut"
-                            }}
-                          >
-                            <FaArrowRight className={styles.arrowIcon} />
-                          </motion.div>
-                        </motion.button>
-                      )}
-                    </div>
-                  </motion.div>
-                );
-              })}
+              ← Swipe or tap arrows to explore →
             </motion.div>
+          )}
+        </motion.div>
+      </div>
 
-            {/* Mobile Instructions */}
-            {isMobile && (
-              <motion.div 
-                className={styles.mobileInstructions}
-                initial={{ opacity: 0 }}
-                animate={isInView ? { opacity: 1 } : {}}
-                transition={{ delay: 1, duration: 0.6 }}
-              >
-                Swipe to navigate
-              </motion.div>
-            )}
-          </div>
-
-          {/* Service Counter */}
-          <motion.div 
-            className={styles.serviceCounter}
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : {}}
-            transition={{ delay: 0.8 }}
-          >
-            {activeIndex + 1} of {enhancedServices.length}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Enhanced Services Chat Popup */}
-      <ServicesChatPopup
-        isOpen={isChatOpen}
-        onClose={closeChatPopup}
-        selectedService={selectedService}
-      />
-    </>
+      {/* Services Chat Popup */}
+      <AnimatePresence>
+        {showChatPopup && selectedService && (
+          <ServicesChatPopup
+            isOpen={showChatPopup}
+            service={selectedService}
+            onClose={() => {
+              setShowChatPopup(false);
+              setSelectedService(null);
+            }}
+          />
+        )}
+      </AnimatePresence>
+    </section>
   );
 };
 

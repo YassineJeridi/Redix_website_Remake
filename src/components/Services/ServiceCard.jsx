@@ -1,146 +1,167 @@
 // src/components/Services/ServiceCard.jsx
 import { motion } from 'framer-motion';
-import { FaArrowRight, FaCheck, FaStar } from 'react-icons/fa';
+import { FaArrowRight, FaStar, FaCheck } from 'react-icons/fa';
 import styles from './ServiceCard.module.css';
 
-const ServiceCard = ({ service, transform, isTransitioning, onClick }) => {
+const ServiceCard = ({ 
+  service, 
+  transform, 
+  onGetQuote,
+  isMobile = false 
+}) => {
   const IconComponent = service.icon;
 
   return (
     <motion.div
-      className={`${styles.serviceCard} ${transform.isActive ? styles.active : ''} ${
-        service.isPopular ? styles.popular : ''
-      }`}
-      onClick={onClick}
+      className={`${styles.serviceCard} ${transform.isActive ? styles.active : ''} ${isMobile ? styles.mobile : ''}`}
       animate={{
-        rotateY: transform.rotateY,
-        x: transform.translateX,
-        z: transform.translateZ,
-        scale: transform.scale,
-        opacity: transform.opacity
+        rotateY: transform.rotateY || 0,
+        x: transform.translateX || 0,
+        z: transform.translateZ || 0,
+        scale: transform.scale || 1,
       }}
-      style={{ zIndex: transform.zIndex }}
+      style={{
+        opacity: transform.opacity || 1,
+        zIndex: transform.zIndex || 0,
+        '--service-gradient': service.gradient
+      }}
       transition={{
         duration: 0.6,
-        ease: [0.25, 0.46, 0.45, 0.94],
-        opacity: { duration: 0.3 }
+        ease: [0.25, 0.46, 0.45, 0.94]
       }}
       whileHover={transform.isActive ? {
-        scale: transform.scale * 1.05,
-        rotateY: transform.rotateY * 0.8,
-        y: -10
-      } : {
-        scale: transform.scale * 1.02
-      }}
-      whileTap={{ scale: transform.scale * 0.98 }}
+        scale: (transform.scale || 1) * (isMobile ? 1.01 : 1.02),
+        y: isMobile ? -4 : -8
+      } : {}}
+      whileTap={{ scale: (transform.scale || 1) * 0.98 }}
     >
-      {/* Popular Badge */}
-      {service.highlight && (
+      {/* Popular Tag */}
+      {service.isPopular && (
         <motion.div 
-          className={styles.badge}
-          initial={{ scale: 0, rotate: -12 }}
-          animate={{ scale: 1, rotate: -12 }}
-          transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
+          className={styles.popularTag}
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.5 }}
         >
-          {service.isPopular && <FaStar className={styles.starIcon} />}
-          {service.highlight}
+          <FaStar className={styles.popularIcon} />
+          <span>Most Popular</span>
         </motion.div>
       )}
 
-      {/* Card Glow Effect */}
-      <div 
-        className={styles.cardGlow}
-        style={{ background: service.gradient }}
-      />
+      {/* Glassmorphism Background */}
+      <div className={styles.cardBackground}>
+        <div 
+          className={styles.gradientOverlay}
+          style={{ opacity: transform.isActive ? 0.1 : 0.05 }}
+        />
+        <div className={styles.glassEffect} />
+      </div>
 
-      {/* Icon Container */}
+      {/* Service Icon */}
       <motion.div 
         className={styles.iconContainer}
-        style={{ background: service.gradient }}
-        whileHover={{ rotate: 360 }}
-        transition={{ duration: 0.6 }}
+        whileHover={{ rotate: transform.isActive ? 360 : 0 }}
+        transition={{ duration: 0.8 }}
       >
         <IconComponent className={styles.serviceIcon} />
-        <div className={styles.iconRipple} />
+        <div className={styles.iconGlow} />
       </motion.div>
 
-      {/* Service Content */}
-      <div className={styles.serviceContent}>
-        <motion.h3 
-          className={styles.serviceTitle}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-        >
-          {service.title}
-        </motion.h3>
-
-        <motion.p 
-          className={styles.serviceDescription}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-        >
-          {service.description}
-        </motion.p>
-
-        {/* Features List (only for active card) */}
+      {/* Content */}
+      <div className={styles.cardContent}>
+        <h3 className={styles.serviceTitle}>{service.title}</h3>
+        <p className={styles.serviceDescription}>{service.description}</p>
+        
+        {/* Features List - Only show if active */}
         {transform.isActive && (
-          <motion.ul 
-            className={styles.featuresList}
+          <motion.div
+            className={styles.featuresSection}
             initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
             transition={{ duration: 0.4, delay: 0.2 }}
           >
-            {service.features.slice(0, 4).map((feature, index) => (
-              <motion.li 
-                key={index}
-                className={styles.featureItem}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.4 + index * 0.1 }}
-              >
-                <FaCheck className={styles.checkIcon} />
-                {feature}
-              </motion.li>
-            ))}
-          </motion.ul>
+            <h4 className={styles.featuresTitle}>What's Included:</h4>
+            <div className={styles.featuresList}>
+              {service.features?.slice(0, isMobile ? 4 : 6).map((feature, index) => (
+                <motion.div 
+                  key={index} 
+                  className={styles.featureItem}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3, delay: 0.1 * index }}
+                >
+                  <FaCheck className={styles.checkIcon} />
+                  <span>{feature}</span>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
         )}
 
-        {/* Pricing Section */}
-        <motion.div 
-          className={styles.pricingSection}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-        >
-          <div className={styles.pricing}>
-            Starting at {service.pricing}
+        {/* Features Pills - Show when not active */}
+        {!transform.isActive && (
+          <div className={styles.featuresPills}>
+            {service.features?.slice(0, isMobile ? 2 : 3).map((feature, index) => (
+              <span key={index} className={styles.featurePill}>
+                {feature}
+              </span>
+            ))}
           </div>
-        </motion.div>
+        )}
 
-        {/* CTA Button (only for active card) */}
+        {/* Pricing */}
+        <div className={styles.pricingContainer}>
+          <span className={styles.priceLabel}>Starting at</span>
+          <span className={styles.priceAmount}>{service.pricing}</span>
+          {transform.isActive && (
+            <motion.p 
+              className={styles.priceNote}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+            >
+              Final price based on project requirements
+            </motion.p>
+          )}
+        </div>
+
+        {/* CTA Button - Always show for active card */}
         {transform.isActive && (
           <motion.button
             className={styles.ctaButton}
-            initial={{ opacity: 0, y: 20, scale: 0.8 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.8 }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ duration: 0.3, delay: 0.6 }}
             onClick={(e) => {
               e.stopPropagation();
-              // This will trigger the chat popup
-              onClick();
+              onGetQuote();
             }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
-            Get Started
-            <FaArrowRight className={styles.arrowIcon} />
+            Get Custom Quote
+            <FaArrowRight className={styles.ctaIcon} />
           </motion.button>
         )}
+
+        {/* Active Card Indicator for non-active cards */}
+        {!transform.isActive && (
+          <motion.div
+            className={styles.activeIndicator}
+            initial={{ opacity: 0.6 }}
+            animate={{ opacity: [0.6, 1, 0.6] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          >
+            <span>Click to view details</span>
+          </motion.div>
+        )}
       </div>
+
+      {/* Card Shine Effect */}
+      <div className={styles.cardShine} />
+      
+      {/* Inner Glow */}
+      <div className={styles.innerGlow} />
     </motion.div>
   );
 };
