@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaTimes, FaPaperPlane, FaCheck, FaExclamationTriangle, FaRocket } from 'react-icons/fa';
 import { sendTelegramMessage } from '../../../services/telegramService';
+import { services } from '../../../data/services'; // Import available services
 import styles from './ServicesChatPopup.module.css';
 
 const ServicesChatPopup = ({ isOpen, service, onClose }) => {
@@ -11,21 +12,40 @@ const ServicesChatPopup = ({ isOpen, service, onClose }) => {
     name: '',
     email: '',
     phone: '',
-    company: '',
-    projectDescription: '',
-    budget: '',
-    timeline: ''
+    selectedService: '',
+    message: ''
   });
   const [status, setStatus] = useState('idle');
   const [currentStep, setCurrentStep] = useState(1);
   const messagesEndRef = useRef(null);
 
+  // Debug logging to trace undefined issues
+  useEffect(() => {
+    console.log('ServicesChatPopup props:', { isOpen, service, onClose });
+    if (service) {
+      console.log('Service details:', service);
+      // Pre-select the service when popup opens
+      setFormData(prev => ({
+        ...prev,
+        selectedService: service.title || ''
+      }));
+    }
+  }, [isOpen, service, onClose]);
+
   // Effects
   useEffect(() => {
-    if (isOpen && service) {
-      // Reset form when opening with new service
+    if (isOpen) {
+      // Reset form when opening
       setCurrentStep(1);
       setStatus('idle');
+      // Pre-select service if provided
+      if (service) {
+        setFormData(prev => ({
+          ...prev,
+          selectedService: service.title || ''
+        }));
+      }
+      console.log('Chat popup opened for service:', service?.title);
     }
   }, [isOpen, service]);
 
@@ -34,26 +54,9 @@ const ServicesChatPopup = ({ isOpen, service, onClose }) => {
   }, [status, currentStep]);
 
   // Early return after all hooks
-  if (!isOpen || !service) {
+  if (!isOpen) {
     return null;
   }
-
-  const budgetRanges = [
-    '$1,000 - $5,000',
-    '$5,000 - $15,000', 
-    '$15,000 - $50,000',
-    '$50,000 - $100,000',
-    '$100,000+'
-  ];
-
-  const timelineOptions = [
-    'ASAP (Rush job)',
-    '2-4 weeks',
-    '1-2 months',
-    '2-3 months',
-    '3-6 months',
-    '6+ months'
-  ];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -65,12 +68,16 @@ const ServicesChatPopup = ({ isOpen, service, onClose }) => {
     setStatus('sending');
 
     try {
-      // Prepare message for Telegram
+      // Prepare message data to match your telegram service API
       const telegramData = {
-        service: service.title,
-        ...formData,
-        timestamp: new Date().toISOString()
+        name: formData.name || 'Not provided',
+        email: formData.email || 'Not provided',
+        phone: formData.phone || 'Not provided',
+        selectedService: formData.selectedService || 'Unknown Service',
+        message: formData.message || 'No message provided'
       };
+
+      console.log('Sending telegram data:', telegramData);
 
       await sendTelegramMessage(telegramData);
       setStatus('success');
@@ -80,8 +87,11 @@ const ServicesChatPopup = ({ isOpen, service, onClose }) => {
         onClose();
         setStatus('idle');
         setFormData({
-          name: '', email: '', phone: '', company: '',
-          projectDescription: '', budget: '', timeline: ''
+          name: '', 
+          email: '', 
+          phone: '', 
+          selectedService: '',
+          message: ''
         });
       }, 3000);
     } catch (error) {
@@ -99,6 +109,16 @@ const ServicesChatPopup = ({ isOpen, service, onClose }) => {
   };
 
   const getStepProgress = () => (currentStep / 3) * 100;
+
+  function isStepValid() {
+    if (currentStep === 1) {
+      return formData.name && formData.email && formData.phone && formData.selectedService;
+    }
+    if (currentStep === 2) {
+      return formData.message;
+    }
+    return true;
+  }
 
   return (
     <AnimatePresence>
@@ -120,9 +140,8 @@ const ServicesChatPopup = ({ isOpen, service, onClose }) => {
           {/* Header */}
           <div className={styles.modalHeader}>
             <div className={styles.serviceInfo}>
-              <service.icon className={styles.serviceIcon} />
               <div>
-                <h3>Get Quote for {service.title}</h3>
+                <h3>Get Quote for Your Project</h3>
                 <p>Let's discuss your project requirements</p>
               </div>
             </div>
@@ -196,14 +215,21 @@ const ServicesChatPopup = ({ isOpen, service, onClose }) => {
                       </div>
 
                       <div className={styles.inputGroup}>
-                        <label>Company (Optional)</label>
-                        <input
-                          type="text"
-                          name="company"
-                          value={formData.company}
+                        <label>Select Service *</label>
+                        <select
+                          name="selectedService"
+                          value={formData.selectedService}
                           onChange={handleChange}
-                          placeholder="Your Company Name"
-                        />
+                          required
+                          className={styles.serviceSelect}
+                        >
+                          <option value="">Choose a service...</option>
+                          {services.map(serviceItem => (
+                            <option key={serviceItem.id} value={serviceItem.title}>
+                              {serviceItem.title}
+                            </option>
+                          ))}
+                        </select>
                       </div>
                     </motion.div>
                   )}
@@ -219,45 +245,15 @@ const ServicesChatPopup = ({ isOpen, service, onClose }) => {
                       <h4>Project Details</h4>
                       
                       <div className={styles.inputGroup}>
-                        <label>Project Description *</label>
+                        <label>Message / Project Description *</label>
                         <textarea
-                          name="projectDescription"
-                          value={formData.projectDescription}
+                          name="message"
+                          value={formData.message}
                           onChange={handleChange}
                           required
-                          rows="4"
-                          placeholder={`Tell us about your ${service.title.toLowerCase()} project. What are your goals, requirements, and expectations?`}
+                          rows="6"
+                          placeholder={`Tell us about your ${formData.selectedService ? formData.selectedService.toLowerCase() : 'project'}. What are your goals, requirements, and expectations? Please be as detailed as possible.`}
                         />
-                      </div>
-
-                      <div className={styles.inputGroup}>
-                        <label>Budget Range *</label>
-                        <select
-                          name="budget"
-                          value={formData.budget}
-                          onChange={handleChange}
-                          required
-                        >
-                          <option value="">Select budget range</option>
-                          {budgetRanges.map(range => (
-                            <option key={range} value={range}>{range}</option>
-                          ))}
-                        </select>
-                      </div>
-
-                      <div className={styles.inputGroup}>
-                        <label>Timeline *</label>
-                        <select
-                          name="timeline"
-                          value={formData.timeline}
-                          onChange={handleChange}
-                          required
-                        >
-                          <option value="">Select timeline</option>
-                          {timelineOptions.map(option => (
-                            <option key={option} value={option}>{option}</option>
-                          ))}
-                        </select>
                       </div>
                     </motion.div>
                   )}
@@ -274,22 +270,28 @@ const ServicesChatPopup = ({ isOpen, service, onClose }) => {
                       
                       <div className={styles.reviewSection}>
                         <div className={styles.reviewItem}>
-                          <strong>Service:</strong> {service.title}
+                          <strong>Service:</strong> {formData.selectedService || 'N/A'}
                         </div>
                         <div className={styles.reviewItem}>
-                          <strong>Name:</strong> {formData.name}
+                          <strong>Name:</strong> {formData.name || 'N/A'}
                         </div>
                         <div className={styles.reviewItem}>
-                          <strong>Email:</strong> {formData.email}
+                          <strong>Email:</strong> {formData.email || 'N/A'}
                         </div>
                         <div className={styles.reviewItem}>
-                          <strong>Budget:</strong> {formData.budget}
+                          <strong>Phone:</strong> {formData.phone || 'N/A'}
                         </div>
                         <div className={styles.reviewItem}>
-                          <strong>Timeline:</strong> {formData.timeline}
+                          <strong>Message Preview:</strong> 
+                          <p className={styles.messagePreview}>
+                            {formData.message?.length > 100 
+                              ? `${formData.message.substring(0, 100)}...` 
+                              : formData.message || 'N/A'
+                            }
+                          </p>
                         </div>
                       </div>
-                      
+
                       <div className={styles.submitNote}>
                         <FaRocket />
                         <p>We'll review your request and get back to you within 24 hours with a detailed proposal.</p>
@@ -348,7 +350,7 @@ const ServicesChatPopup = ({ isOpen, service, onClose }) => {
               >
                 <FaCheck className={styles.successIcon} />
                 <h3>Request Sent Successfully!</h3>
-                <p>Thank you for your interest in our {service.title} service. We'll review your requirements and send you a detailed proposal within 24 hours.</p>
+                <p>Thank you for your interest in our services. We'll review your requirements and send you a detailed proposal within 24 hours.</p>
               </motion.div>
             ) : (
               <motion.div
@@ -374,16 +376,6 @@ const ServicesChatPopup = ({ isOpen, service, onClose }) => {
       </motion.div>
     </AnimatePresence>
   );
-
-  function isStepValid() {
-    if (currentStep === 1) {
-      return formData.name && formData.email && formData.phone;
-    }
-    if (currentStep === 2) {
-      return formData.projectDescription && formData.budget && formData.timeline;
-    }
-    return true;
-  }
 };
 
 export default ServicesChatPopup;

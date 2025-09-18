@@ -91,7 +91,7 @@ export const services = [
     description: "Reliable and secure hosting solutions for your digital presence",
     icon: "☁️",
     features: [
-      "Cloud Hosting",
+      "Cloud Hosting",  
       "SSL Certificates",
       "Daily Backups",
       "24/7 Monitoring",
@@ -106,7 +106,7 @@ export const services = [
     id: 7,
     title: "Graphic Design",
     description: "Creative and visually stunning designs for your brand",
-    icon: "🎨",
+    icon: "🖌️",
     features: [
       "Logo Design",
       "Brand Identity",

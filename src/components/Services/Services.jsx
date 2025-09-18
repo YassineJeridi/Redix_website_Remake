@@ -1,9 +1,10 @@
 // src/components/Services/Services.jsx
+
 import { useRef, useState, useCallback, useMemo, useEffect } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import {
-  FaCode, FaMobile, FaChartLine, FaPencilRuler, FaVideo, FaCloud,
-  FaChevronLeft, FaChevronRight
+  FaCode, FaMobile, FaChartLine, FaPencilRuler, FaVideo, FaCloud, FaPenFancy ,
+  FaChevronLeft, FaChevronRight 
 } from 'react-icons/fa';
 import { services } from '../../data/services';
 import ServiceCard from './ServiceCard';
@@ -27,7 +28,8 @@ const Services = () => {
     3: FaMobile, // Mobile App
     4: FaPencilRuler, // Graphic Design - Updated icon
     5: FaVideo, // Video Production
-    6: FaCloud // E-commerce
+    6: FaCloud ,// E-commerce
+    7: FaPenFancy  // Graphic Design
   }), []);
 
   // Enhanced services with styling data - Popular service centered
@@ -265,16 +267,7 @@ const Services = () => {
           </div>
 
           {/* Mobile Swipe Hint */}
-          {isMobile && (
-            <motion.div
-              className={styles.swipeHint}
-              initial={{ opacity: 1 }}
-              animate={{ opacity: [1, 0.5, 1] }}
-              transition={{ duration: 2, repeat: 2 }}
-            >
-              ← Swipe or tap arrows to explore →
-            </motion.div>
-          )}
+  
         </motion.div>
       </div>
 
