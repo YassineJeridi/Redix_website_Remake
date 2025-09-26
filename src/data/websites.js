@@ -1,42 +1,87 @@
 // src/data/websites.js
 
 const websitesImages = {
-  redix: "assets/screenshots/redix-solutions.png",
-  pexa: "assets/screenshots/pexa-portfolio.png",
-  cimef: "assets/screenshots/cimef-clinic.png",
-  thehouse: "assets/screenshots/thehouse-rb.png",
+  redix: {
+    main: "assets/screenshots/redix/main.png",
+    screenshots: [
+      "assets/screenshots/redix/home.png",
+      "assets/screenshots/redix/services.png", 
+      "assets/screenshots/redix/about.png",
+      "assets/screenshots/redix/contact.png"
+    ]
+  },
+  pexa: {
+    main: "assets/screenshots/pexa/main.png",
+    screenshots: [
+      "assets/screenshots/pexa/portfolio.png",
+      "assets/screenshots/pexa/projects.png",
+      "assets/screenshots/pexa/skills.png"
+    ]
+  },
+  cimef: {
+    main: "assets/screenshots/cimef/main.png", 
+    screenshots: [
+      "assets/screenshots/cimef/services.png",
+      "assets/screenshots/cimef/NosPartenaires.png",
+      "assets/screenshots/cimef/Footer.png"
+    ]
+  },
+  thehouse: {
+    main: "assets/screenshots/thehouse/main.png",
+    screenshots: [
+      "assets/screenshots/thehouse/listings.png",
+      "assets/screenshots/thehouse/contact.png", 
+      "assets/screenshots/thehouse/details.png"
+    ]
+  },
+  yesly: {
+    main: "assets/screenshots/yesly/main.png",
+    screenshots: [
+      "assets/screenshots/yesly/courses.png",
+      "assets/screenshots/yesly/booking.png",
+      "assets/screenshots/yesly/service.png"
+    ]
+  },
+  ggg: {
+    main: "assets/screenshots/ggg/main.png", 
+    screenshots: [
+      "assets/screenshots/ggg/products.png",
+      "assets/screenshots/ggg/about.png",
+      "assets/screenshots/ggg/store.png"
+    ]
+  }
 };
 
 export const websites = [
   {
     id: 1,
     title: "Redix Solutions",
-    subtitle: "Digital Agency Website",
+    subtitle: "Digital Agency Website", 
     url: "https://www.redixsolutions.pro/",
-    description: "Official website of Redix Digital Solutions showcasing our comprehensive digital services, team expertise, and portfolio. Built with modern React architecture and responsive design principles.",
-    image: websitesImages.redix,
+    description: "Complete digital agency platform featuring service portfolio, team showcase, and client testimonials with modern responsive design.",
+    images: websitesImages.redix,
     category: "Corporate",
     industry: "Digital Agency",
     year: "2024",
-    client: "Internal Project",
+    client: "Redix Digital",
     status: "Live",
     featured: true,
     technologies: ["React", "Framer Motion", "CSS Modules", "Vite"],
     features: ["Responsive Design", "SEO Optimized", "Performance Optimized", "Modern UI"],
     metrics: {
       loadTime: "< 2s",
-      lighthouse: "95+",
+      lighthouse: "95+", 
       responsive: "100%"
     }
   },
   {
     id: 2,
     title: "Pexa Portfolio",
-    subtitle: "Personal Developer Portfolio",
+    subtitle: "Developer Portfolio",
     url: "https://yassinejeridi.github.io/pexa/",
-    description: "A sleek personal portfolio website for Yassine Jeridi showcasing coding projects, technical skills, and professional experience with clean design and smooth interactions.",
-    image: websitesImages.pexa,
-    category: "Portfolio",
+    description: "Clean and modern developer portfolio showcasing projects, skills, and professional experience with interactive design elements.",
+    images: websitesImages.pexa,
+    category: "Portfolio", 
     industry: "Personal Branding",
     year: "2024",
     client: "Yassine Jeridi",
@@ -52,14 +97,14 @@ export const websites = [
   },
   {
     id: 3,
-    title: "CIMEF Clinic",
+    title: "CIMEF Clinic", 
     subtitle: "Healthcare Website",
     url: "https://yassinejeridi.github.io/CIMEF/",
-    description: "Professional healthcare website for CIMEF clinic featuring service information, doctor profiles, appointment booking system, and patient resources with accessibility-first design.",
-    image: websitesImages.cimef,
+    description: "Professional healthcare platform with service catalog, doctor profiles, appointment booking, and patient resources.",
+    images: websitesImages.cimef,
     category: "Healthcare",
     industry: "Medical Services",
-    year: "2024",
+    year: "2024", 
     client: "CIMEF Clinic",
     status: "Live",
     featured: false,
@@ -75,32 +120,75 @@ export const websites = [
     id: 4,
     title: "The House RB",
     subtitle: "Real Estate Platform",
-    url: "https://yassinejeridi.github.io/TheHouseRB/",
-    description: "Modern real estate website for The House RB featuring property listings, advanced search filters, virtual tours, and integrated contact system for seamless client experience.",
-    image: websitesImages.thehouse,
+    url: "https://yassinejeridi.github.io/TheHouseRB/", 
+    description: "Comprehensive real estate platform with property listings, advanced search, detailed property views, and contact management.",
+    images: websitesImages.thehouse,
     category: "Real Estate",
     industry: "Property Management",
     year: "2024",
     client: "The House RB",
     status: "Live",
     featured: false,
-    technologies: ["HTML5", "CSS3", "JavaScript", "Local Storage"],
+    technologies: ["HTML5", "CSS3", "JavaScript", "PHP", "MySQL"],
     features: ["Property Listings", "Search Filters", "Image Galleries", "Contact Forms"],
     metrics: {
       loadTime: "< 2.5s",
       lighthouse: "87+",
       responsive: "100%"
     }
+  },
+  {
+    id: 5,
+    title: "Yesly Training Center",
+    subtitle: "Educational Platform",
+    githubUrl: "https://github.com/YassineJeridi/Yesly_training_center",
+    description: "Modern educational management system with course catalog, student portal, instructor dashboard, and booking functionality.",
+    images: websitesImages.yesly,
+    category: "Education",
+    industry: "Training & Education", 
+    year: "2024",
+    client: "Yesly Training Center",
+    status: "Screenshots",
+    featured: false,
+    technologies: ["React", "Vite", "JavaScript", "CSS"],
+    features: ["Course Management", "Student Portal", "Booking System", "Responsive Design"],
+    metrics: {
+      loadTime: "< 2s",
+      lighthouse: "90+",
+      responsive: "100%"
+    }
+  },
+  {
+    id: 6,
+    title: "GGG Store",
+    subtitle: "E-commerce Platform",
+    url: "https://ggguys.store/", 
+    description: "Full-featured e-commerce platform with product catalog, shopping cart, user accounts, and secure payment processing.",
+    images: websitesImages.ggg,
+    category: "E-commerce",
+    industry: "Online Retail",
+    year: "2024",
+    client: "GGG Company",
+    status: "Live",
+    featured: false,
+    technologies: ["React", "Node.js", "JavaScript", "MongoDB"],
+    features: ["Product Catalog", "Shopping Cart", "User Accounts", "Payment Processing"],
+    metrics: {
+      loadTime: "< 2.5s",
+      lighthouse: "88+", 
+      responsive: "100%"
+    }
   }
 ];
 
-// Export categories for filtering
 export const categories = [
   "All",
-  "Corporate",
+  "Corporate", 
   "Portfolio",
+  "Education", 
   "Healthcare",
-  "Real Estate"
+  "Real Estate",
+  "E-commerce"
 ];
 
 export default websites;

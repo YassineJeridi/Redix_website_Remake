@@ -1,297 +1,336 @@
 // src/components/DevProject/DevProject.jsx
-import { useState, useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
-import { FaExternalLinkAlt, FaGithub, FaRocket, FaStar, FaFilter } from 'react-icons/fa';
+import React, { useState, useMemo, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  FaCode, FaFilter, FaStar, FaExternalLinkAlt, FaEye, 
+  FaGithub, FaPlay, FaImages, FaRocket, FaAward
+} from 'react-icons/fa';
 import { websites, categories } from '../../data/websites';
+import ProjectModal from './ProjectModal/ProjectModal';
 import styles from './DevProject.module.css';
 
+// Animation variants for performance optimization
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      duration: 0.6
+    }
+  }
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 50 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: "easeOut" }
+  }
+};
+
 const DevProject = () => {
-    const [activeFilter, setActiveFilter] = useState('All');
-    const [selectedProject, setSelectedProject] = useState(null);
-    const sectionRef = useRef(null);
-    const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
+  const [activeFilter, setActiveFilter] = useState('All');
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-    // Filter projects based on active category
-    const filteredProjects = activeFilter === 'All'
-        ? websites
-        : websites.filter(project => project.category === activeFilter);
+  // Optimized filtering with useMemo
+  const filteredProjects = useMemo(() => {
+    return activeFilter === 'All' 
+      ? websites 
+      : websites.filter(project => project.category === activeFilter);
+  }, [activeFilter]);
 
-    const openModal = (project) => {
-        setSelectedProject(project);
-        document.body.style.overflow = 'hidden';
+  // Memoized callbacks for performance
+  const handleProjectView = useCallback((project) => {
+    setSelectedProject(project);
+    setIsModalOpen(true);
+  }, []);
+
+  const handleCloseModal = useCallback(() => {
+    setIsModalOpen(false);
+    setSelectedProject(null);
+  }, []);
+
+  const handleFilterChange = useCallback((category) => {
+    setActiveFilter(category);
+  }, []);
+
+  const renderStatusBadge = useCallback((status) => {
+    const statusConfig = {
+      'Live': { 
+        icon: FaPlay, 
+        className: styles.statusLive, 
+        text: 'Live Preview' 
+      },
+      'Screenshots': { 
+        icon: FaImages, 
+        className: styles.statusScreenshots, 
+        text: 'View Screenshots' 
+      }
     };
 
-    const closeModal = () => {
-        setSelectedProject(null);
-        document.body.style.overflow = 'unset';
-    };
+    const config = statusConfig[status] || statusConfig['Screenshots'];
+    const IconComponent = config.icon;
 
     return (
-        <section className={styles.devProjectSection} id="projects" ref={sectionRef}>
-            {/* Background Elements */}
-            <div className={styles.backgroundElements}>
-                <motion.div
-                    className={styles.gradientOrb}
-                    animate={{
-                        scale: [1, 1.2, 1],
-                        opacity: [0.1, 0.2, 0.1]
-                    }}
-                    transition={{
-                        duration: 8,
-                        repeat: Infinity,
-                        ease: "easeInOut"
-                    }}
-                />
-            </div>
-
-            <div className={styles.container}>
-                {/* Header */}
-                <motion.div
-                    className={styles.header}
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ duration: 0.8, delay: 0.2 }}
-                >
-                    <span className={styles.sectionTag}>
-                        <FaRocket /> Our Portfolio
-                    </span>
-                    <h2 className={styles.title}>Development Projects</h2>
-                    <p className={styles.subtitle}>
-                        Discover our diverse portfolio of web development projects that demonstrate our expertise in creating innovative digital solutions
-                    </p>
-                </motion.div>
-
-                {/* Filter Tabs */}
-                <motion.div
-                    className={styles.filterContainer}
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ duration: 0.6, delay: 0.4 }}
-                >
-                    <div className={styles.filterTabs}>
-                        <FaFilter className={styles.filterIcon} />
-                        {categories.map((category) => (
-                            <motion.button
-                                key={category}
-                                className={`${styles.filterTab} ${activeFilter === category ? styles.active : ''}`}
-                                onClick={() => setActiveFilter(category)}
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                            >
-                                {category}
-                            </motion.button>
-                        ))}
-                    </div>
-                </motion.div>
-
-                {/* Projects Grid */}
-                <motion.div
-                    className={styles.projectsContainer}
-                    initial={{ opacity: 0 }}
-                    animate={isInView ? { opacity: 1 } : {}}
-                    transition={{ duration: 0.8, delay: 0.6 }}
-                >
-                    <div className={styles.projectGrid}>
-                        {filteredProjects.map((project, index) => (
-                            <ProjectCard
-                                key={project.id}
-                                project={project}
-                                index={index}
-                                onViewDetails={() => openModal(project)}
-                            />
-                        ))}
-                    </div>
-                </motion.div>
-
-                {/* Stats Section */}
-                <motion.div
-                    className={styles.statsSection}
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ duration: 0.8, delay: 1 }}
-                >
-                    <div className={styles.statsGrid}>
-                        <div className={styles.statItem}>
-                            <h3>50+</h3>
-                            <p>Projects Delivered</p>
-                        </div>
-                        <div className={styles.statItem}>
-                            <h3>100%</h3>
-                            <p>Client Satisfaction</p>
-                        </div>
-                        <div className={styles.statItem}>
-                            <h3>24/7</h3>
-                            <p>Support Available</p>
-                        </div>
-                        <div className={styles.statItem}>
-                            <h3>5★</h3>
-                            <p>Average Rating</p>
-                        </div>
-                    </div>
-                </motion.div>
-            </div>
-
-            {/* Project Modal */}
-            {selectedProject && (
-                <ProjectModal project={selectedProject} onClose={closeModal} />
-            )}
-        </section>
+      <div className={`${styles.statusBadge} ${config.className}`}>
+        <IconComponent className={styles.statusIcon} />
+        <span>{config.text}</span>
+      </div>
     );
-};
+  }, []);
 
-// Project Card Component
-const ProjectCard = ({ project, index, onViewDetails }) => {
-    return (
-        <motion.div
-            className={`${styles.projectCard} ${project.featured ? styles.featured : ''}`}
-            initial={{ opacity: 0, y: 60 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: index * 0.1 }}
-            whileHover={{ y: -10, scale: 1.02 }}
+  return (
+    <section className={styles.portfolioSection}>
+      {/* Enhanced Background Effects */}
+      <div className={styles.backgroundEffects}>
+        <div className={styles.gradientOrb1} />
+        <div className={styles.gradientOrb2} />
+        <div className={styles.gridPattern} />
+      </div>
+
+      <div className={styles.container}>
+        {/* Modern Header Section */}
+        <motion.div 
+          className={styles.headerSection}
+          initial={{ opacity: 0, y: 60 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
         >
-            {project.featured && (
-                <div className={styles.featuredBadge}>
-                    <FaStar /> Featured
-                </div>
-            )}
+          <div className={styles.headerBadge}>
+            <FaCode />
+            <span>Our Portfolio</span>
+          </div>
+          
+          <h1 className={styles.mainTitle}>
+            Crafting Digital
+            <span className={styles.gradientText}> Experiences</span>
+          </h1>
+          
+          <p className={styles.headerDescription}>
+            Explore our collection of cutting-edge web applications and digital solutions, 
+            each crafted with precision, creativity, and the latest technologies.
+          </p>
 
-            <div className={styles.imageContainer}>
-                <img
-                    src={project.image}
-                    alt={`${project.title} Screenshot`}
-                    className={styles.projectImage}
-                    loading="lazy"
-                />
-                <div className={styles.imageOverlay}>
-                    <div className={styles.overlayContent}>
-                        <motion.button
-                            className={styles.viewButton}
-                            onClick={onViewDetails}
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.9 }}
-                        >
-                            View Details
-                        </motion.button>
-                        <motion.a
-                            href={project.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className={styles.liveButton}
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.9 }}
-                        >
-                            <FaExternalLinkAlt /> Live Site
-                        </motion.a>
-                    </div>
-                </div>
-            </div>
-
-            <div className={styles.projectInfo}>
-                <div className={styles.projectHeader}>
-                    <h3 className={styles.projectTitle}>{project.title}</h3>
-                    <span className={styles.projectYear}>{project.year}</span>
-                </div>
-                <p className={styles.projectSubtitle}>{project.subtitle}</p>
-                <p className={styles.projectDescription}>{project.description}</p>
-
-                <div className={styles.projectMeta}>
-                    <div className={styles.techStack}>
-                        {project.technologies.slice(0, 3).map((tech, idx) => (
-                            <span key={idx} className={styles.techTag}>{tech}</span>
-                        ))}
-                        {project.technologies.length > 3 && (
-                            <span className={styles.techMore}>+{project.technologies.length - 3}</span>
-                        )}
-                    </div>
-                    <div className={styles.projectMetrics}>
-                        <span className={styles.metric}>
-                            ⚡ {project.metrics.loadTime}
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </motion.div>
-    );
-};
-
-// Project Modal Component
-const ProjectModal = ({ project, onClose }) => {
-    return (
-        <motion.div
-            className={styles.modalBackdrop}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
-        >
-            <motion.div
-                className={styles.modalContainer}
-                initial={{ opacity: 0, scale: 0.8, y: 100 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.8, y: 100 }}
-                onClick={(e) => e.stopPropagation()}
+          {/* Stats Cards */}
+          <div className={styles.statsContainer}>
+            <motion.div 
+              className={styles.statCard}
+              whileHover={{ scale: 1.05, y: -5 }}
             >
-                <button className={styles.closeButton} onClick={onClose}>×</button>
+              <FaRocket className={styles.statIcon} />
+              <span className={styles.statNumber}>6+</span>
+              <span className={styles.statLabel}>Projects</span>
+            </motion.div>
+            
+            <motion.div 
+              className={styles.statCard}
+              whileHover={{ scale: 1.05, y: -5 }}
+            >
+              <FaAward className={styles.statIcon} />
+              <span className={styles.statNumber}>100%</span>
+              <span className={styles.statLabel}>Success Rate</span>
+            </motion.div>
+            
+            <motion.div 
+              className={styles.statCard}
+              whileHover={{ scale: 1.05, y: -5 }}
+            >
+              <FaStar className={styles.statIcon} />
+              <span className={styles.statNumber}>95+</span>
+              <span className={styles.statLabel}>Avg Score</span>
+            </motion.div>
+          </div>
+        </motion.div>
 
-                <div className={styles.modalImage}>
-                    <img src={project.image} alt={project.title} />
-                </div>
+        {/* Enhanced Filter Section */}
+        <motion.div 
+          className={styles.filterSection}
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+        >
+          <div className={styles.filterHeader}>
+            <FaFilter className={styles.filterIcon} />
+            <span>Filter by Category</span>
+          </div>
+          
+          <div className={styles.filterTabs}>
+            {categories.map((category, index) => (
+              <motion.button
+                key={category}
+                className={`${styles.filterTab} ${
+                  activeFilter === category ? styles.active : ''
+                }`}
+                onClick={() => handleFilterChange(category)}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.1 }}
+              >
+                {category}
+                {activeFilter === category && (
+                  <motion.div
+                    className={styles.activeIndicator}
+                    layoutId="activeTab"
+                  />
+                )}
+              </motion.button>
+            ))}
+          </div>
+        </motion.div>
 
-                <div className={styles.modalContent}>
-                    <div className={styles.modalHeader}>
-                        <h2>{project.title}</h2>
-                        <p className={styles.modalSubtitle}>{project.subtitle}</p>
-                    </div>
+        {/* Enhanced Projects Grid */}
+        <motion.div
+          className={styles.projectsGrid}
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <AnimatePresence mode="wait">
+            {filteredProjects.map((project) => (
+              <motion.div
+                key={project.id}
+                className={`${styles.projectCard} ${
+                  project.featured ? styles.featured : ''
+                }`}
+                variants={cardVariants}
+                layout
+                whileHover={{ 
+                  y: -15,
+                  transition: { duration: 0.3, ease: "easeOut" }
+                }}
+              >
+                {/* Featured Badge */}
+                {project.featured && (
+                  <div className={styles.featuredBadge}>
+                    <FaStar />
+                    <span>Featured</span>
+                  </div>
+                )}
 
-                    <div className={styles.modalDetails}>
-                        <div className={styles.detailRow}>
-                            <strong>Client:</strong> {project.client}
-                        </div>
-                        <div className={styles.detailRow}>
-                            <strong>Industry:</strong> {project.industry}
-                        </div>
-                        <div className={styles.detailRow}>
-                            <strong>Year:</strong> {project.year}
-                        </div>
-                        <div className={styles.detailRow}>
-                            <strong>Status:</strong> <span className={styles.liveStatus}>{project.status}</span>
-                        </div>
-                    </div>
+                {/* Enhanced Image Container */}
+                <div className={styles.imageContainer}>
+                  <div className={styles.mainImage}>
+                    <img 
+                      src={project.images.main} 
+                      alt={project.title}
+                      loading="lazy"
+                    />
+                  </div>
+                  
+                  {/* Screenshots Preview */}
+                  <div className={styles.screenshotsPreview}>
+                    {project.images.screenshots.slice(0, 3).map((screenshot, index) => (
+                      <div key={index} className={styles.screenshotThumb}>
+                        <img src={screenshot} alt={`${project.title} screenshot ${index + 1}`} />
+                      </div>
+                    ))}
+                    {project.images.screenshots.length > 3 && (
+                      <div className={styles.moreScreenshots}>
+                        +{project.images.screenshots.length - 3}
+                      </div>
+                    )}
+                  </div>
 
-                    <p className={styles.modalDescription}>{project.description}</p>
-
-                    <div className={styles.modalTech}>
-                        <h4>Technologies Used:</h4>
-                        <div className={styles.techList}>
-                            {project.technologies.map((tech, idx) => (
-                                <span key={idx} className={styles.techBadge}>{tech}</span>
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className={styles.modalFeatures}>
-                        <h4>Key Features:</h4>
-                        <ul>
-                            {project.features.map((feature, idx) => (
-                                <li key={idx}>{feature}</li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    <div className={styles.modalActions}>
-                        <a
+                  {/* Overlay with Actions */}
+                  <div className={styles.imageOverlay}>
+                    <div className={styles.overlayContent}>
+                      <button
+                        className={styles.primaryAction}
+                        onClick={() => handleProjectView(project)}
+                      >
+                        <FaEye />
+                        View Project
+                      </button>
+                      
+                      <div className={styles.secondaryActions}>
+                        {project.url && project.status === 'Live' && (
+                          <a
                             href={project.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className={styles.visitButton}
-                        >
-                            <FaExternalLinkAlt /> Visit Website
-                        </a>
+                            className={styles.liveLink}
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <FaExternalLinkAlt />
+                          </a>
+                        )}
+                        {project.githubUrl && (
+                          <a
+                            href={project.githubUrl}
+                            target="_blank"
+                            rel="noopener noreferrer" 
+                            className={styles.githubLink}
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <FaGithub />
+                          </a>
+                        )}
+                      </div>
                     </div>
+                  </div>
                 </div>
-            </motion.div>
+
+                {/* Enhanced Card Content */}
+                <div className={styles.cardContent}>
+                  <div className={styles.cardHeader}>
+                    <div className={styles.titleSection}>
+                      <h3 className={styles.projectTitle}>{project.title}</h3>
+                      <span className={styles.projectSubtitle}>{project.subtitle}</span>
+                    </div>
+                    {renderStatusBadge(project.status)}
+                  </div>
+
+                  <p className={styles.projectDescription}>
+                    {project.description}
+                  </p>
+
+                  {/* Technology Stack */}
+                  <div className={styles.techStack}>
+                    {project.technologies.slice(0, 4).map((tech, index) => (
+                      <span key={index} className={styles.techTag}>
+                        {tech}
+                      </span>
+                    ))}
+                    {project.technologies.length > 4 && (
+                      <span className={styles.techMore}>
+                        +{project.technologies.length - 4}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Performance Metrics */}
+                  <div className={styles.metricsBar}>
+                    <div className={styles.metric}>
+                      <span className={styles.metricLabel}>Speed</span>
+                      <span className={styles.metricValue}>{project.metrics.loadTime}</span>
+                    </div>
+                    <div className={styles.metric}>
+                      <span className={styles.metricLabel}>Score</span>
+                      <span className={styles.metricValue}>{project.metrics.lighthouse}</span>
+                    </div>
+                    <div className={styles.metricDivider} />
+                    <div className={styles.yearBadge}>{project.year}</div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </motion.div>
-    );
+      </div>
+
+      {/* Enhanced Project Modal */}
+      <ProjectModal
+        project={selectedProject}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+      />
+    </section>
+  );
 };
 
 export default DevProject;
