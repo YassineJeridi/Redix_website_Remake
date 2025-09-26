@@ -17,7 +17,8 @@ const clientsLogos = {
   novart: "assets/logos/novart.png",
   orchidee: "assets/logos/orchidee-logo.png",
   sbh: "assets/logos/sbh.png",
-  coinLogo: "assets/logos/coin-logo.png"
+  coinLogo: "assets/logos/coin-logo.png",
+  istoreTn: "assets/logos/istore-tn.jpg"
 };
 
 export const clients = [
@@ -50,6 +51,11 @@ export const clients = [
     name: "Flayes",
     logo: clientsLogos.flayes,
     type: "Technology Startup"
+  },
+  {
+    name: "iStore Tunisia",
+    logo: clientsLogos.istoreTn,
+    type: "Retail"
   },
   {
     name: "Fast Food Frita",

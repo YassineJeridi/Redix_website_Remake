@@ -97,25 +97,31 @@ export const websites = [
   },
   {
     id: 3,
-    title: "CIMEF Clinic", 
-    subtitle: "Healthcare Website",
-    url: "https://yassinejeridi.github.io/CIMEF/",
-    description: "Professional healthcare platform with service catalog, doctor profiles, appointment booking, and patient resources.",
-    images: websitesImages.cimef,
-    category: "Healthcare",
-    industry: "Medical Services",
-    year: "2024", 
-    client: "CIMEF Clinic",
+    title: "CIMEF Tunisia",
+    subtitle: "Apple Premium Reseller & B2B Solutions",
+    url: "https://cimef.tn",
+    description: "Corporate web presence for Tunisia’s Apple Premium Reseller and enterprise equipment leader, highlighting retail stores, authorized service, and B2B print and IT solutions.", 
+    images: websitesImages.cimef, // keep main + screenshots as configured in your data model
+    category: "Corporate",
+    industry: "IT Services & Office Equipment",
+    year: "2024",
+    client: "CIMEF S.A.",
     status: "Live",
     featured: false,
-    technologies: ["HTML5", "Bootstrap", "CSS3", "JavaScript"],
-    features: ["Service Catalog", "Doctor Profiles", "Accessibility", "Mobile Optimized"],
+    technologies: ["HTML5", "CSS3", "JavaScript", "Bootstrap"],
+    features: [
+      "Store & Services Showcase",
+      "Apple Premium Reseller Highlight",
+      "B2B Solutions Overview",
+      "Contact & Support Access"
+    ],
     metrics: {
-      loadTime: "< 2s",
-      lighthouse: "89+",
+      loadTime: "< 2.5s",
+      lighthouse: "90+",
       responsive: "100%"
     }
   },
+
   {
     id: 4,
     title: "The House RB",
