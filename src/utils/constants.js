@@ -52,10 +52,10 @@ export const SOCIAL_MEDIA = {
 export const NAVIGATION = {
   main: [
     { id: 'home', label: 'Home', href: '#home' },
-    { id: 'about', label: 'About', href: '#about' },
+    { id: 'why-choose-us', label: 'About', href: '#why-choose-us' },
     { id: 'services', label: 'Services', href: '#services' },
-    { id: 'results', label: 'Results', href: '#results' },
-    { id: 'contact', label: 'Contact', href: '#contact' }
+    { id: 'video-showcase', label: 'Results', href: '#video-showcase' },
+    { id: 'book-call', label: 'Contact', href: '#book-call' }
   ],
   footer: {
     services: [

@@ -10,14 +10,14 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
 
-  // Navigation items with icons
-  const navItems = [
-    { id: 'home', label: 'Home', href: '#home', icon: FaHome },
-    { id: 'about', label: 'About', href: '#about', icon: FaUser },
-    { id: 'services', label: 'Services', href: '#services', icon: FaCog },
-    { id: 'results', label: 'Results', href: '#results', icon: FaTrophy },
-    { id: 'contact', label: 'Contact', href: '#contact', icon: FaEnvelope }
-  ];
+// Navigation items with icons
+const navItems = [
+  { id: 'home', label: 'Home', href: '#home', icon: FaHome },
+  { id: 'why-choose-us', label: 'About', href: '#why-choose-us', icon: FaUser },
+  { id: 'services', label: 'Services', href: '#services', icon: FaCog },
+  { id: 'video-showcase', label: 'Results', href: '#video-showcase', icon: FaTrophy },
+  { id: 'book-call', label: 'Free Consultation', href: '#book-call', icon: FaEnvelope }
+];
 
   // Handle scroll effect
   useEffect(() => {

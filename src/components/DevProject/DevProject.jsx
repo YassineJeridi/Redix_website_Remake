@@ -105,8 +105,8 @@ const DevProject = () => {
           </div>
           
           <h1 className={styles.mainTitle}>
-            Crafting Digital
-            <span className={styles.gradientText}> Experiences</span>
+            <span className={styles.gradientText}>Crafting Digital
+             Experiences</span>
           </h1>
           
           <p className={styles.headerDescription}>
@@ -115,34 +115,7 @@ const DevProject = () => {
           </p>
 
           {/* Stats Cards */}
-          <div className={styles.statsContainer}>
-            <motion.div 
-              className={styles.statCard}
-              whileHover={{ scale: 1.05, y: -5 }}
-            >
-              <FaRocket className={styles.statIcon} />
-              <span className={styles.statNumber}>6+</span>
-              <span className={styles.statLabel}>Projects</span>
-            </motion.div>
-            
-            <motion.div 
-              className={styles.statCard}
-              whileHover={{ scale: 1.05, y: -5 }}
-            >
-              <FaAward className={styles.statIcon} />
-              <span className={styles.statNumber}>100%</span>
-              <span className={styles.statLabel}>Success Rate</span>
-            </motion.div>
-            
-            <motion.div 
-              className={styles.statCard}
-              whileHover={{ scale: 1.05, y: -5 }}
-            >
-              <FaStar className={styles.statIcon} />
-              <span className={styles.statNumber}>95+</span>
-              <span className={styles.statLabel}>Avg Score</span>
-            </motion.div>
-          </div>
+
         </motion.div>
 
         {/* Enhanced Filter Section */}
@@ -152,35 +125,7 @@ const DevProject = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
         >
-          <div className={styles.filterHeader}>
-            <FaFilter className={styles.filterIcon} />
-            <span>Filter by Category</span>
-          </div>
-          
-          <div className={styles.filterTabs}>
-            {categories.map((category, index) => (
-              <motion.button
-                key={category}
-                className={`${styles.filterTab} ${
-                  activeFilter === category ? styles.active : ''
-                }`}
-                onClick={() => handleFilterChange(category)}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 }}
-              >
-                {category}
-                {activeFilter === category && (
-                  <motion.div
-                    className={styles.activeIndicator}
-                    layoutId="activeTab"
-                  />
-                )}
-              </motion.button>
-            ))}
-          </div>
+
         </motion.div>
 
         {/* Enhanced Projects Grid */}
@@ -190,7 +135,7 @@ const DevProject = () => {
           initial="hidden"
           animate="visible"
         >
-          <AnimatePresence mode="wait">
+          <AnimatePresence>
             {filteredProjects.map((project) => (
               <motion.div
                 key={project.id}

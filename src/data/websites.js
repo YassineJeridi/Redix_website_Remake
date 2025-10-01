@@ -76,7 +76,7 @@ export const websites = [
   },
   {
     id: 2,
-    title: "Pexa Portfolio",
+    title: "Video editor Portfolio",
     subtitle: "Developer Portfolio",
     url: "https://yassinejeridi.github.io/pexa/",
     description: "Clean and modern developer portfolio showcasing projects, skills, and professional experience with interactive design elements.",

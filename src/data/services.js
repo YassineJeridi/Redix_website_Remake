@@ -4,7 +4,6 @@ export const services = [
     id: 1,
     title: "Web Development",
     description: "Modern, responsive websites built with cutting-edge technologies",
-    icon: "🌐",
     features: [
       "React/Vue.js Development",
       "Node.js Backend",
@@ -15,13 +14,13 @@ export const services = [
     ],
     technologies: ["React", "Vue.js", "Node.js", "MongoDB", "PostgreSQL"],
     pricing: "Starting from 500 TND",
-    MostPopular: false
+    MostPopular: false,
+    common: true
   },
   {
     id: 3,
     title: "Mobile Development",
     description: "Native and cross-platform mobile applications",
-    icon: "📱",
     features: [
       "iOS & Android Apps",
       "React Native Development",
@@ -32,13 +31,13 @@ export const services = [
     ],
     technologies: ["React Native", "Flutter", "Swift", "Kotlin"],
     pricing: "Starting from 700 TND",
-    MostPopular: false
+    MostPopular: false,
+    common: false
   },
   {
     id: 2,
     title: "Digital Marketing", // Now Most Popular!
     description: "Comprehensive digital marketing strategies that drive results",
-    icon: "📈",
     features: [
       "Social Media Management",
       "Google Ads Campaigns",
@@ -49,13 +48,13 @@ export const services = [
     ],
     technologies: ["Google Analytics", "Facebook Ads", "Google Ads", "Mailchimp"],
     pricing: "Starting from 550 TND",
-    MostPopular: true
+    MostPopular: true,
+    common: false
   },
   {
     id: 4,
     title: "UI/UX Design",
     description: "User-centered design that converts visitors into customers",
-    icon: "🎨",
     features: [
       "User Research",
       "Wireframing & Prototyping",
@@ -66,13 +65,13 @@ export const services = [
     ],
     technologies: ["Figma", "Adobe XD", "Sketch", "Principle"],
     pricing: "Starting from 750 TND",
-    MostPopular: false
+    MostPopular: false,
+    common: false
   },
   {
     id: 5,
     title: "Video Production",
     description: "Professional video content that tells your brand story",
-    icon: "🎬",
     features: [
       "Corporate Videos",
       "Social Media Content",
@@ -83,13 +82,13 @@ export const services = [
     ],
     technologies: ["Adobe Premiere", "After Effects", "DaVinci Resolve"],
     pricing: "Starting from 250 TND",
-    MostPopular: false
+    MostPopular: false,
+    common: true
   },
   {
     id: 6,
     title: "Hosting Services",
     description: "Reliable and secure hosting solutions for your digital presence",
-    icon: "☁️",
     features: [
       "Cloud Hosting",  
       "SSL Certificates",
@@ -100,13 +99,13 @@ export const services = [
     ],
     technologies: ["AWS", "DigitalOcean", "Cloudflare"],
     pricing: "Starting from 350 TND",
-    MostPopular: false
+    MostPopular: false,
+    common: true
   },
   {
     id: 7,
     title: "Graphic Design",
     description: "Creative and visually stunning designs for your brand",
-    icon: "🖌️",
     features: [
       "Logo Design",
       "Brand Identity",
@@ -117,6 +116,7 @@ export const services = [
     ],
     technologies: [ "Adobe Photoshop", "Illustrator", "InDesign" ],
     pricing: "Starting from 300 TND",
-    MostPopular: false
+    MostPopular: false,
+    common: false
   }
 ];

@@ -107,7 +107,7 @@ const WhyChooseUs = () => {
   };
 
   return (
-    <section className={`${styles.whyChooseUs} ${isVisible ? styles.animate : ''}`} ref={sectionRef}>
+    <section className={`${styles.whyChooseUs} ${isVisible ? styles.animate : ''}`} ref={sectionRef} id='why-choose-us'>
       {/* Animated Background Elements */}
       <motion.div
         className={styles.backgroundGlow}
