@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaBars, FaTimes, FaHome, FaUser, FaCog, FaTrophy, FaEnvelope } from 'react-icons/fa';
 import styles from './Navbar.module.css';
-import logoImage from '/redix.png';
+const logoImage = '/Redix_website_Remake/redix.png';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
