@@ -16,7 +16,7 @@ import {
   FaIcons,
   FaCode
 } from 'react-icons/fa';
-import logoImage from '/redix.png';
+const logoImage = '/Redix_website_Remake/redix.png';
 import styles from './Banner.module.css';
 
 const Banner = () => {
