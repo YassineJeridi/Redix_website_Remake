@@ -3,16 +3,8 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 export default defineConfig({
+  // DELETE or CHANGE this line:
+  base: '/', 
   plugins: [react()],
-  base: '/Redix_website_Remake/',
-  build: {
-    outDir: 'dist',
-    assetsDir: 'assets'
-  },
-  publicDir: 'public', // Ensure this is set
-  server: {
-    fs: {
-      strict: false // Allow serving files outside of root if needed
-    }
-  }
 })
+
