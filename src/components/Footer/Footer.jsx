@@ -16,7 +16,7 @@ import {
   FaChartLine,
   FaPalette
 } from 'react-icons/fa';
-const logoImage = '/Redix_website_Remake/redix.png';
+const logoImage = '/redix.png';
 import styles from './Footer.module.css';
 
 const Footer = () => {
