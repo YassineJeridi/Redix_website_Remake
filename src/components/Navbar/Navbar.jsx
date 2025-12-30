@@ -1,8 +1,9 @@
 // src/components/Navbar/Navbar.jsx
 
 import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaBars, FaTimes, FaHome, FaUser, FaCog, FaBriefcase, FaEnvelope, FaEye, FaCouch, FaPlane, FaTshirt, FaUtensils, FaExternalLinkAlt } from 'react-icons/fa';
+import { FaBars, FaTimes, FaHome, FaUser, FaCog, FaBriefcase, FaEnvelope, FaEye, FaCouch, FaPlane, FaTshirt, FaUtensils } from 'react-icons/fa';
 import styles from './Navbar.module.css';
 
 const logoImage = '/redix.png';
@@ -12,48 +13,54 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [isWorkOpen, setIsWorkOpen] = useState(false);
+  const location = useLocation();
 
   // Portfolio/Work items
   const workItems = [
     { 
       label: 'Quick Overview', 
-      href: '#video-showcase',
+      href: '/#video-showcase',
       icon: FaEye,
-      isInternal: true
+      isInternal: true,
+      isHash: true
     },
     { 
       label: 'Furniture Store', 
-      href: 'https://redixdigitalsolutions.github.io/redix-furniture/',
+      href: '/furniture',
       icon: FaCouch,
-      isInternal: false
+      isInternal: true,
+      isHash: false
     },
     { 
       label: 'Travel Agency', 
-      href: 'https://redixdigitalsolutions.github.io/travel-agency/',
+      href: '/travel',
       icon: FaPlane,
-      isInternal: false
+      isInternal: true,
+      isHash: false
     },
     { 
       label: 'Fashion Portfolio', 
-      href: 'https://redixdigitalsolutions.github.io/redixfashionportfolio/',
+      href: '/fashion',
       icon: FaTshirt,
-      isInternal: false
+      isInternal: true,
+      isHash: false
     },
     { 
       label: 'Chef Portfolio', 
-      href: 'https://redixdigitalsolutions.github.io/restaurant-chef-portfolio/',
+      href: '/chef',
       icon: FaUtensils,
-      isInternal: false
+      isInternal: true,
+      isHash: false
     }
   ];
 
   // Navigation items
   const navItems = [
-    { id: 'home', label: 'Home', href: '#home', icon: FaHome },
-    { id: 'why-choose-us', label: 'About', href: '#why-choose-us', icon: FaUser },
-    { id: 'services', label: 'Services', href: '#services', icon: FaCog },
+    { id: 'home', label: 'Home', href: '/#home', icon: FaHome, isHash: true },
+    { id: 'why-choose-us', label: 'About', href: '/#why-choose-us', icon: FaUser, isHash: true },
+    { id: 'services', label: 'Services', href: '/#services', icon: FaCog, isHash: true },
     { id: 'our-work', label: 'Our Work', href: '#', icon: FaBriefcase, hasDropdown: true },
-    { id: 'book-call', label: 'Free Consultation', href: '#book-call', icon: FaEnvelope }
+    { id: 'book-call', label: 'Free Consultation', href: '/#book-call', icon: FaEnvelope, isHash: true }
   ];
 
   // Handle scroll effect
@@ -62,24 +69,26 @@ const Navbar = () => {
       const scrollPosition = window.scrollY;
       setScrolled(scrollPosition > 50);
 
-      const sections = navItems.filter(item => !item.hasDropdown).map(item => item.id);
-      const currentSection = sections.find(section => {
-        const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          return rect.top <= 100 && rect.bottom >= 100;
-        }
-        return false;
-      });
+      if (location.pathname === '/') {
+        const sections = navItems.filter(item => !item.hasDropdown).map(item => item.id);
+        const currentSection = sections.find(section => {
+          const element = document.getElementById(section);
+          if (element) {
+            const rect = element.getBoundingClientRect();
+            return rect.top <= 100 && rect.bottom >= 100;
+          }
+          return false;
+        });
 
-      if (currentSection) {
-        setActiveSection(currentSection);
+        if (currentSection) {
+          setActiveSection(currentSection);
+        }
       }
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [location.pathname]);
 
   // Smooth scroll to section
   const scrollToSection = (sectionId) => {
@@ -95,15 +104,23 @@ const Navbar = () => {
     setIsWorkOpen(false);
   };
 
+  // Handle navigation click
+  const handleNavClick = (e, item) => {
+    if (item.isHash && location.pathname === '/') {
+      e.preventDefault();
+      scrollToSection(item.id);
+    }
+  };
+
   // Handle work item click
   const handleWorkItemClick = (item) => {
-    if (item.isInternal) {
-      scrollToSection(item.href.replace('#', ''));
-    } else {
-      window.open(item.href, '_blank', 'noopener,noreferrer');
-    }
     setIsWorkOpen(false);
     setIsOpen(false);
+    
+    if (item.isHash && location.pathname === '/') {
+      const sectionId = item.href.replace('/#', '');
+      scrollToSection(sectionId);
+    }
   };
 
   // Close dropdowns when clicking outside
@@ -144,18 +161,19 @@ const Navbar = () => {
     >
       <div className={styles.container}>
         {/* Logo */}
-        <motion.a
-          href="#home"
+        <Link
+          to="/"
           className={styles.logo}
-          onClick={(e) => {
-            e.preventDefault();
-            scrollToSection('home');
-          }}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         >
-          <img src={logoImage} alt="Redix Logo" className={styles.logoImage} />
-        </motion.a>
+          <motion.img 
+            src={logoImage} 
+            alt="Redix Logo" 
+            className={styles.logoImage}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          />
+        </Link>
 
         {/* Desktop Navigation */}
         <ul className={styles.navLinks}>
@@ -189,17 +207,32 @@ const Navbar = () => {
                       >
                         {workItems.map((work, idx) => {
                           const WorkIcon = work.icon;
-                          return (
-                            <motion.button
+                          return work.isHash ? (
+                            <Link
                               key={idx}
-                              onClick={() => handleWorkItemClick(work)}
+                              to={work.href}
+                              onClick={() => {
+                                if (location.pathname === '/') {
+                                  const sectionId = work.href.replace('/#', '');
+                                  scrollToSection(sectionId);
+                                }
+                                handleWorkItemClick(work);
+                              }}
                               className={styles.dropdownItem}
-                              whileHover={{ x: 5 }}
                             >
                               <WorkIcon className={styles.dropdownIcon} />
                               <span>{work.label}</span>
-                              {!work.isInternal && <FaExternalLinkAlt className={styles.externalIcon} />}
-                            </motion.button>
+                            </Link>
+                          ) : (
+                            <Link
+                              key={idx}
+                              to={work.href}
+                              onClick={() => handleWorkItemClick(work)}
+                              className={styles.dropdownItem}
+                            >
+                              <WorkIcon className={styles.dropdownIcon} />
+                              <span>{work.label}</span>
+                            </Link>
                           );
                         })}
                       </motion.div>
@@ -211,19 +244,20 @@ const Navbar = () => {
 
             return (
               <li key={item.id}>
-                <motion.a
-                  href={item.href}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    scrollToSection(item.id);
-                  }}
+                <Link
+                  to={item.href}
+                  onClick={(e) => handleNavClick(e, item)}
                   className={`${styles.navLink} ${activeSection === item.id ? styles.active : ''}`}
-                  whileHover={{ y: -2 }}
-                  whileTap={{ scale: 0.95 }}
                 >
-                  <IconComponent className={styles.navIcon} />
-                  {item.label}
-                </motion.a>
+                  <motion.div
+                    className={styles.navLinkContent}
+                    whileHover={{ y: -2 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <IconComponent className={styles.navIcon} />
+                    {item.label}
+                  </motion.div>
+                </Link>
               </li>
             );
           })}
@@ -297,16 +331,21 @@ const Navbar = () => {
                               {workItems.map((work, idx) => {
                                 const WorkIcon = work.icon;
                                 return (
-                                  <motion.button
+                                  <Link
                                     key={idx}
-                                    onClick={() => handleWorkItemClick(work)}
+                                    to={work.href}
+                                    onClick={() => {
+                                      if (work.isHash && location.pathname === '/') {
+                                        const sectionId = work.href.replace('/#', '');
+                                        scrollToSection(sectionId);
+                                      }
+                                      handleWorkItemClick(work);
+                                    }}
                                     className={styles.mobileDropdownItem}
-                                    whileTap={{ scale: 0.98 }}
                                   >
                                     <WorkIcon className={styles.mobileNavIcon} />
                                     <span>{work.label}</span>
-                                    {!work.isInternal && <FaExternalLinkAlt className={styles.externalIcon} />}
-                                  </motion.button>
+                                  </Link>
                                 );
                               })}
                             </motion.div>
@@ -318,19 +357,20 @@ const Navbar = () => {
 
                   return (
                     <li key={item.id}>
-                      <motion.a
-                        href={item.href}
+                      <Link
+                        to={item.href}
                         onClick={(e) => {
-                          e.preventDefault();
-                          scrollToSection(item.id);
+                          handleNavClick(e, item);
+                          setIsOpen(false);
                         }}
                         className={`${styles.mobileNavLink} ${activeSection === item.id ? styles.activeMobile : ''}`}
-                        whileTap={{ scale: 0.98 }}
                       >
                         <IconComponent className={styles.mobileNavIcon} />
                         {item.label}
-                        {activeSection === item.id && <span className={styles.activeDot}></span>}
-                      </motion.a>
+                        {activeSection === item.id && location.pathname === '/' && (
+                          <span className={styles.activeDot}></span>
+                        )}
+                      </Link>
                     </li>
                   );
                 })}

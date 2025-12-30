@@ -1,0 +1,272 @@
+/* src/components/Portfolio/PortfolioGallery.module.css */
+.gallery {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.header h1 {
+  font-size: 3rem;
+  background: linear-gradient(135deg, #c12de0 0%, #8a2be2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1rem;
+}
+
+.header p {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.tabs {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 3rem;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  background: rgba(193, 45, 224, 0.1);
+  border: 1px solid rgba(193, 45, 224, 0.3);
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tab:hover {
+  background: rgba(193, 45, 224, 0.2);
+  border-color: #c12de0;
+}
+
+.activeTab {
+  background: #c12de0 !important;
+  color: white !important;
+  border-color: #c12de0 !important;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.item {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.item img,
+.item video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(193, 45, 224, 0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  color: white;
+  font-size: 1.5rem;
+}
+
+.item:hover .overlay {
+  opacity: 1;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.modal img,
+.modal video {
+  max-width: 90%;
+  max-height: 90vh;
+  border-radius: 12px;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  background: #c12de0;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  z-index: 10000;
+}
+
+@media (max-width: 768px) {
+  .header h1 {
+    font-size: 2rem;
+  }
+  
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+}
+
+
+/* Add to existing PortfolioGallery.module.css */
+
+.headerIcon {
+  font-size: 3rem;
+  color: #c12de0;
+  margin-bottom: 1rem;
+}
+
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+
+.stat {
+  text-align: center;
+}
+
+.statNumber {
+  display: block;
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #c12de0 0%, #8a2be2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.statLabel {
+  display: block;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.filterContainer {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  padding: 0.75rem 1.5rem;
+  background: rgba(193, 45, 224, 0.1);
+  border: 1px solid rgba(193, 45, 224, 0.3);
+  border-radius: 25px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filterBtn:hover {
+  background: rgba(193, 45, 224, 0.2);
+  border-color: #c12de0;
+}
+
+.activeFilter {
+  background: #c12de0 !important;
+  color: white !important;
+  border-color: #c12de0 !important;
+}
+
+.playIcon {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.videoTitle {
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+.brandTag,
+.categoryTag {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(193, 45, 224, 0.9);
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.modalContent h3 {
+  color: white;
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.brandLabel,
+.categoryLabel {
+  color: #c12de0;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.modalVideo {
+  max-width: 90vw;
+  max-height: 80vh;
+  border-radius: 12px;
+}
+
+@media (max-width: 768px) {
+  .stats {
+    gap: 2rem;
+  }
+  
+  .statNumber {
+    font-size: 2rem;
+  }
+  
+  .filterContainer {
+    padding: 0 1rem;
+  }
+}

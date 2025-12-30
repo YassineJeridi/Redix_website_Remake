@@ -3,8 +3,16 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 export default defineConfig({
-  // DELETE or CHANGE this line:
-  base: '/', 
   plugins: [react()],
+  base: '/',
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets'
+  },
+  publicDir: 'public',
+  server: {
+    fs: {
+      strict: false
+    }
+  }
 })
-
