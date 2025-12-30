@@ -113,7 +113,7 @@ const Services = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className={styles.section}>
+    <section ref={sectionRef}  id="services"  className={styles.section}>
       <div className={styles.container}>
         {/* Header */}
         <motion.div

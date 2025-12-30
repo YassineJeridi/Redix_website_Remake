@@ -137,7 +137,7 @@ const VideoShowcase = () => {
   const progress = ((currentIndex + 1) / videoProjects.length) * 100;
 
   return (
-    <section ref={sectionRef} className={styles.videoShowcase} id="video-showcase">
+    <section ref={sectionRef} id="video-showcase" className={styles.videoShowcase} >
       <div className={styles.container}>
         {/* Header */}
         <motion.div 

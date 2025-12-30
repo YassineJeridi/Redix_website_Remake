@@ -1,23 +1,60 @@
 // src/components/Navbar/Navbar.jsx
+
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaBars, FaTimes, FaHome, FaUser, FaCog, FaTrophy, FaEnvelope } from 'react-icons/fa';
+import { FaBars, FaTimes, FaHome, FaUser, FaCog, FaBriefcase, FaEnvelope, FaEye, FaCouch, FaPlane, FaTshirt, FaUtensils, FaExternalLinkAlt } from 'react-icons/fa';
 import styles from './Navbar.module.css';
+
 const logoImage = '/redix.png';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
+  const [isWorkOpen, setIsWorkOpen] = useState(false);
 
-// Navigation items with icons
-const navItems = [
-  { id: 'home', label: 'Home', href: '#home', icon: FaHome },
-  { id: 'why-choose-us', label: 'About', href: '#why-choose-us', icon: FaUser },
-  { id: 'services', label: 'Services', href: '#services', icon: FaCog },
-  { id: 'video-showcase', label: 'Results', href: '#video-showcase', icon: FaTrophy },
-  { id: 'book-call', label: 'Free Consultation', href: '#book-call', icon: FaEnvelope }
-];
+  // Portfolio/Work items
+  const workItems = [
+    { 
+      label: 'Quick Overview', 
+      href: '#video-showcase',
+      icon: FaEye,
+      isInternal: true
+    },
+    { 
+      label: 'Furniture Store', 
+      href: 'https://redixdigitalsolutions.github.io/redix-furniture/',
+      icon: FaCouch,
+      isInternal: false
+    },
+    { 
+      label: 'Travel Agency', 
+      href: 'https://redixdigitalsolutions.github.io/travel-agency/',
+      icon: FaPlane,
+      isInternal: false
+    },
+    { 
+      label: 'Fashion Portfolio', 
+      href: 'https://redixdigitalsolutions.github.io/redixfashionportfolio/',
+      icon: FaTshirt,
+      isInternal: false
+    },
+    { 
+      label: 'Chef Portfolio', 
+      href: 'https://redixdigitalsolutions.github.io/restaurant-chef-portfolio/',
+      icon: FaUtensils,
+      isInternal: false
+    }
+  ];
+
+  // Navigation items
+  const navItems = [
+    { id: 'home', label: 'Home', href: '#home', icon: FaHome },
+    { id: 'why-choose-us', label: 'About', href: '#why-choose-us', icon: FaUser },
+    { id: 'services', label: 'Services', href: '#services', icon: FaCog },
+    { id: 'our-work', label: 'Our Work', href: '#', icon: FaBriefcase, hasDropdown: true },
+    { id: 'book-call', label: 'Free Consultation', href: '#book-call', icon: FaEnvelope }
+  ];
 
   // Handle scroll effect
   useEffect(() => {
@@ -25,8 +62,7 @@ const navItems = [
       const scrollPosition = window.scrollY;
       setScrolled(scrollPosition > 50);
 
-      // Update active section based on scroll position
-      const sections = navItems.map(item => item.id);
+      const sections = navItems.filter(item => !item.hasDropdown).map(item => item.id);
       const currentSection = sections.find(section => {
         const element = document.getElementById(section);
         if (element) {
@@ -35,7 +71,7 @@ const navItems = [
         }
         return false;
       });
-      
+
       if (currentSection) {
         setActiveSection(currentSection);
       }
@@ -49,132 +85,132 @@ const navItems = [
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
     if (element) {
-      const offsetTop = element.offsetTop - 80; // Account for navbar height
+      const offsetTop = element.offsetTop - 80;
       window.scrollTo({
         top: offsetTop,
         behavior: 'smooth'
       });
     }
     setIsOpen(false);
+    setIsWorkOpen(false);
   };
 
-  // Close mobile menu when clicking outside
+  // Handle work item click
+  const handleWorkItemClick = (item) => {
+    if (item.isInternal) {
+      scrollToSection(item.href.replace('#', ''));
+    } else {
+      window.open(item.href, '_blank', 'noopener,noreferrer');
+    }
+    setIsWorkOpen(false);
+    setIsOpen(false);
+  };
+
+  // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (isOpen && !event.target.closest(`.${styles.navbar}`)) {
+      if (!event.target.closest(`.${styles.navbar}`)) {
         setIsOpen(false);
+        setIsWorkOpen(false);
       }
     };
 
     document.addEventListener('click', handleClickOutside);
     return () => document.removeEventListener('click', handleClickOutside);
-  }, [isOpen]);
+  }, []);
 
-  // Animation variants
-  const navbarVariants = {
-    hidden: { y: -100, opacity: 0 },
+  const dropdownVariants = {
+    hidden: { opacity: 0, y: -10, scale: 0.95 },
     visible: {
+      opacity: 1,
       y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.6,
-        ease: [0.25, 0.46, 0.45, 0.94]
-      }
-    }
-  };
-
-  const logoVariants = {
-    hidden: { scale: 0, rotate: -180 },
-    visible: {
       scale: 1,
-      rotate: 0,
-      transition: {
-        duration: 0.8,
-        type: "spring",
-        stiffness: 200,
-        damping: 15
-      }
+      transition: { duration: 0.2, ease: "easeOut" }
     },
-    hover: {
-      scale: 1.05,
-      rotate: 5,
-      transition: { duration: 0.2 }
-    }
-  };
-
-  const menuVariants = {
-    closed: {
+    exit: {
       opacity: 0,
-      x: "100%",
-      transition: {
-        duration: 0.3,
-        ease: [0.25, 0.46, 0.45, 0.94]
-      }
-    },
-    open: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        duration: 0.4,
-        ease: [0.25, 0.46, 0.45, 0.94],
-        staggerChildren: 0.1,
-        delayChildren: 0.1
-      }
-    }
-  };
-
-  const itemVariants = {
-    closed: { opacity: 0, x: 20 },
-    open: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        duration: 0.3,
-        ease: "easeOut"
-      }
+      y: -10,
+      scale: 0.95,
+      transition: { duration: 0.15 }
     }
   };
 
   return (
     <motion.nav
       className={`${styles.navbar} ${scrolled ? styles.scrolled : ''}`}
-      variants={navbarVariants}
-      initial="hidden"
-      animate="visible"
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
     >
       <div className={styles.container}>
         {/* Logo */}
-        <motion.div 
+        <motion.a
+          href="#home"
           className={styles.logo}
-          variants={logoVariants}
-          whileHover="hover"
-          onClick={() => scrollToSection('home')}
+          onClick={(e) => {
+            e.preventDefault();
+            scrollToSection('home');
+          }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
         >
-          <motion.img
-            src={logoImage}
-            alt="Redix Digital Solutions"
-            className={styles.logoImage}
-            whileHover={{ brightness: 1.2 }}
-          />
-      
-        </motion.div>
+          <img src={logoImage} alt="Redix Logo" className={styles.logoImage} />
+        </motion.a>
 
         {/* Desktop Navigation */}
-        <motion.ul 
-          className={styles.navLinks}
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4, staggerChildren: 0.1 }}
-        >
-          {navItems.map((item, index) => {
+        <ul className={styles.navLinks}>
+          {navItems.map((item) => {
             const IconComponent = item.icon;
+            
+            if (item.hasDropdown) {
+              return (
+                <li key={item.id} className={styles.dropdown}>
+                  <motion.button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsWorkOpen(!isWorkOpen);
+                    }}
+                    className={`${styles.navLink} ${isWorkOpen ? styles.active : ''}`}
+                    whileHover={{ y: -2 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <IconComponent className={styles.navIcon} />
+                    {item.label}
+                  </motion.button>
+                  
+                  <AnimatePresence>
+                    {isWorkOpen && (
+                      <motion.div
+                        className={styles.dropdownMenu}
+                        variants={dropdownVariants}
+                        initial="hidden"
+                        animate="visible"
+                        exit="exit"
+                      >
+                        {workItems.map((work, idx) => {
+                          const WorkIcon = work.icon;
+                          return (
+                            <motion.button
+                              key={idx}
+                              onClick={() => handleWorkItemClick(work)}
+                              className={styles.dropdownItem}
+                              whileHover={{ x: 5 }}
+                            >
+                              <WorkIcon className={styles.dropdownIcon} />
+                              <span>{work.label}</span>
+                              {!work.isInternal && <FaExternalLinkAlt className={styles.externalIcon} />}
+                            </motion.button>
+                          );
+                        })}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </li>
+              );
+            }
+
             return (
-              <motion.li 
-                key={item.id}
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.5 + index * 0.1 }}
-              >
+              <li key={item.id}>
                 <motion.a
                   href={item.href}
                   onClick={(e) => {
@@ -182,56 +218,28 @@ const navItems = [
                     scrollToSection(item.id);
                   }}
                   className={`${styles.navLink} ${activeSection === item.id ? styles.active : ''}`}
-                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileHover={{ y: -2 }}
                   whileTap={{ scale: 0.95 }}
                 >
                   <IconComponent className={styles.navIcon} />
-                  <span>{item.label}</span>
-                  <motion.div 
-                    className={styles.linkGlow}
-                    layoutId="linkGlow"
-                    initial={false}
-                    animate={{ opacity: activeSection === item.id ? 1 : 0 }}
-                  />
+                  {item.label}
                 </motion.a>
-              </motion.li>
+              </li>
             );
           })}
-        </motion.ul>
+        </ul>
 
         {/* Mobile Menu Button */}
         <motion.button
           className={styles.menuToggle}
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsOpen(!isOpen);
+          }}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
-          initial={{ opacity: 0, rotate: -90 }}
-          animate={{ opacity: 1, rotate: 0 }}
-          transition={{ duration: 0.5, delay: 0.6 }}
         >
-          <AnimatePresence mode="wait">
-            {isOpen ? (
-              <motion.div
-                key="close"
-                initial={{ rotate: -90, opacity: 0 }}
-                animate={{ rotate: 0, opacity: 1 }}
-                exit={{ rotate: 90, opacity: 0 }}
-                transition={{ duration: 0.2 }}
-              >
-                <FaTimes />
-              </motion.div>
-            ) : (
-              <motion.div
-                key="menu"
-                initial={{ rotate: 90, opacity: 0 }}
-                animate={{ rotate: 0, opacity: 1 }}
-                exit={{ rotate: -90, opacity: 0 }}
-                transition={{ duration: 0.2 }}
-              >
-                <FaBars />
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {isOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
         </motion.button>
       </div>
 
@@ -239,7 +247,6 @@ const navItems = [
       <AnimatePresence>
         {isOpen && (
           <>
-            {/* Mobile Menu Backdrop */}
             <motion.div
               className={styles.mobileBackdrop}
               initial={{ opacity: 0 }}
@@ -247,39 +254,70 @@ const navItems = [
               exit={{ opacity: 0 }}
               onClick={() => setIsOpen(false)}
             />
-            
-            {/* Mobile Menu */}
+
             <motion.div
               className={styles.mobileMenu}
-              variants={menuVariants}
-              initial="closed"
-              animate="open"
-              exit="closed"
+              initial={{ x: "100%", opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: "100%", opacity: 0 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
             >
-              <div className={styles.mobileMenuHeader}>
-                <motion.img
-                  src="/redix.png"
-                  alt="Redix Digital Solutions"
-                  className={styles.mobileLogoImage}
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ duration: 0.3, delay: 0.2 }}
-                />
-                <motion.h3 
-                  className={styles.mobileLogoText}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: 0.3 }}
-                >
-                  Redix Digital Solutions
-                </motion.h3>
+              <div className={styles.mobileHeader}>
+                <img src={logoImage} alt="Redix Logo" className={styles.mobileLogo} />
+                <button className={styles.closeBtn} onClick={() => setIsOpen(false)}>
+                  <FaTimes />
+                </button>
               </div>
 
               <ul className={styles.mobileNavLinks}>
                 {navItems.map((item) => {
                   const IconComponent = item.icon;
+                  
+                  if (item.hasDropdown) {
+                    return (
+                      <div key={item.id}>
+                        <motion.button
+                          onClick={() => setIsWorkOpen(!isWorkOpen)}
+                          className={`${styles.mobileNavLink} ${isWorkOpen ? styles.activeMobile : ''}`}
+                          whileTap={{ scale: 0.98 }}
+                        >
+                          <IconComponent className={styles.mobileNavIcon} />
+                          {item.label}
+                        </motion.button>
+                        
+                        <AnimatePresence>
+                          {isWorkOpen && (
+                            <motion.div
+                              className={styles.mobileDropdown}
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: 'auto', opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              transition={{ duration: 0.3 }}
+                            >
+                              {workItems.map((work, idx) => {
+                                const WorkIcon = work.icon;
+                                return (
+                                  <motion.button
+                                    key={idx}
+                                    onClick={() => handleWorkItemClick(work)}
+                                    className={styles.mobileDropdownItem}
+                                    whileTap={{ scale: 0.98 }}
+                                  >
+                                    <WorkIcon className={styles.mobileNavIcon} />
+                                    <span>{work.label}</span>
+                                    {!work.isInternal && <FaExternalLinkAlt className={styles.externalIcon} />}
+                                  </motion.button>
+                                );
+                              })}
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    );
+                  }
+
                   return (
-                    <motion.li key={item.id} variants={itemVariants}>
+                    <li key={item.id}>
                       <motion.a
                         href={item.href}
                         onClick={(e) => {
@@ -287,41 +325,16 @@ const navItems = [
                           scrollToSection(item.id);
                         }}
                         className={`${styles.mobileNavLink} ${activeSection === item.id ? styles.activeMobile : ''}`}
-                        whileHover={{ x: 10, scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                       >
                         <IconComponent className={styles.mobileNavIcon} />
-                        <span>{item.label}</span>
-                        {activeSection === item.id && (
-                          <motion.div
-                            className={styles.activeDot}
-                            layoutId="activeDot"
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                          />
-                        )}
+                        {item.label}
+                        {activeSection === item.id && <span className={styles.activeDot}></span>}
                       </motion.a>
-                    </motion.li>
+                    </li>
                   );
                 })}
               </ul>
-
-              {/* Mobile CTA */}
-              <motion.div 
-                className={styles.mobileCTA}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.8 }}
-              >
-                <motion.button
-                  className={styles.ctaButton}
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => scrollToSection('contact')}
-                >
-                  Get Started
-                </motion.button>
-              </motion.div>
             </motion.div>
           </>
         )}
