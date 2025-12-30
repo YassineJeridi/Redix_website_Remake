@@ -47,7 +47,7 @@ export const services = [
       "Influencer Marketing"
     ],
     technologies: ["Google Analytics", "Facebook Ads", "Google Ads", "Mailchimp"],
-    pricing: "Starting from 550 TND",
+    pricing: "Starting from 650 TND",
     MostPopular: true,
     common: false
   },
