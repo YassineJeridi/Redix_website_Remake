@@ -28,6 +28,7 @@ const FashionGallery = () => {
         <FaTshirt className={styles.headerIcon} />
         <h1>Fashion Portfolio</h1>
         <p>Trendsetting designs and contemporary fashion statements</p>
+        
       </motion.div>
 
       <motion.div 

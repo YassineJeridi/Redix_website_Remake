@@ -26,9 +26,10 @@ const TravelGallery = () => {
         transition={{ duration: 0.6 }}
       >
         <FaPlane className={styles.headerIcon} />
-        <h1>Travel Agency Portfolio</h1>
-        <p>Explore the world through stunning travel experiences</p>
-        <p>we did colaborate with tthis lebaneese travel agency for video editing service</p>
+<h1>Travel Agency </h1>
+<p>Discover breathtaking destinations through captivating visual storytelling</p>
+<p>We collaborated with this Lebanese travel agency to provide premium video editing services, bringing their travel experiences to life</p>
+
       </motion.div>
 
       <motion.div 
