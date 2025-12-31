@@ -6,7 +6,7 @@ import { furniturePhotos, furnitureVideos } from '../../data/portfolioData';
 import styles from './PortfolioGallery.module.css';
 
 const FurnitureGallery = () => {
-  const [activeTab, setActiveTab] = useState('photos');
+  const [activeTab, setActiveTab] = useState('videos');
   const [selectedMedia, setSelectedMedia] = useState(null);
 
   return (
@@ -16,7 +16,7 @@ const FurnitureGallery = () => {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <h1>Furniture Store Portfolio</h1>
+        <h1>Portfolio</h1>
         <p>Elegant designs for modern living spaces</p>
       </motion.div>
 
