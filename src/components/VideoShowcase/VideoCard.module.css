@@ -10,14 +10,14 @@
   box-shadow: 
     0 20px 60px rgba(0, 0, 0, 0.5),
     0 0 40px rgba(193, 45, 224, 0.2);
-  transition: box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
+/* Hover - Only change border and shadow, NO transforms */
 .card:hover {
   border-color: rgba(193, 45, 224, 0.6);
   box-shadow: 
     0 25px 70px rgba(0, 0, 0, 0.6),
-    0 0 50px rgba(193, 45, 224, 0.3);
+    0 0 50px rgba(193, 45, 224, 0.4);
 }
 
 .landscape {
@@ -45,34 +45,19 @@
   display: block;
 }
 
-/* Style native video controls */
-.video::-webkit-media-controls-panel {
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(10px);
-}
-
-.video::-webkit-media-controls-play-button,
-.video::-webkit-media-controls-mute-button {
-  filter: brightness(1.2);
-}
-
-.video::-webkit-media-controls-timeline {
-  background: rgba(193, 45, 224, 0.3);
-}
-
+/* Remove backdrop-filter from badges - can cause blur */
 .typeBadge {
   position: absolute;
   top: 1.5rem;
   right: 1.5rem;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.85);
   color: #fff;
   padding: 0.5rem 1rem;
   border-radius: 20px;
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   z-index: 10;
   pointer-events: none;
 }
@@ -88,44 +73,9 @@
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   z-index: 10;
   pointer-events: none;
-}
-
-/* Error State */
-.error {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(20, 20, 20, 0.8);
-  border-color: rgba(239, 68, 68, 0.5);
-  min-height: 400px;
-}
-
-.errorContent {
-  text-align: center;
-  color: rgba(255, 255, 255, 0.8);
-  padding: 2rem;
-}
-
-.errorContent h3 {
-  color: #ef4444;
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.errorContent p {
-  margin: 0.5rem 0;
-  font-size: 1rem;
-}
-
-.errorContent small {
-  display: block;
-  margin-top: 1rem;
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 0.8rem;
-  word-break: break-all;
 }
 
 /* Responsive */
@@ -161,10 +111,6 @@
 @media (max-width: 480px) {
   .reel {
     max-width: 300px;
-  }
-
-  .error {
-    min-height: 300px;
   }
 
   .typeBadge,

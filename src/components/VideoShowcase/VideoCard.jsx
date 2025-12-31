@@ -5,21 +5,18 @@ import styles from './VideoCard.module.css';
 
 const cardVariants = {
   enter: (direction) => ({
-    x: direction > 0 ? 400 : -400,
+    x: direction > 0 ? 300 : -300,
     opacity: 0,
-    scale: 0.8,
   }),
   center: {
     x: 0,
     opacity: 1,
-    scale: 1,
-    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] }
+    transition: { duration: 0.4, ease: 'easeOut' }
   },
   exit: (direction) => ({
-    x: direction > 0 ? -400 : 400,
+    x: direction > 0 ? -300 : 300,
     opacity: 0,
-    scale: 0.8,
-    transition: { duration: 0.4 }
+    transition: { duration: 0.3 }
   })
 };
 
@@ -32,7 +29,6 @@ const VideoCard = memo(({ video, direction }) => {
     margin: "-50px"
   });
 
-  // Handle auto-play/pause based on viewport visibility
   useEffect(() => {
     const videoEl = videoRef.current;
     if (!videoEl) return;
@@ -46,7 +42,6 @@ const VideoCard = memo(({ video, direction }) => {
     }
   }, [isInView]);
 
-  // Reset video on mount and set initial volume
   useEffect(() => {
     const videoEl = videoRef.current;
     if (!videoEl) return;
