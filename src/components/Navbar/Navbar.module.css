@@ -6,19 +6,18 @@
   left: 0;
   right: 0;
   z-index: 1000;
-  padding: 1.25rem 0;
-  background: rgba(10, 10, 10, 0.7);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(193, 45, 224, 0.1);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 1rem 0;
+  background: rgba(10, 10, 10, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
 }
 
 .navbar.scrolled {
   padding: 0.75rem 0;
   background: rgba(10, 10, 10, 0.95);
-  border-bottom: 1px solid rgba(193, 45, 224, 0.3);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
 }
 
 .container {
@@ -28,7 +27,6 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 2rem;
 }
 
 /* Logo */
@@ -40,14 +38,13 @@
 }
 
 .logoImage {
-  height: 60px;
+  height: 50px;
   width: auto;
-  filter: drop-shadow(0 0 12px rgba(193, 45, 224, 0.4));
-  transition: filter 0.3s ease;
+  transition: opacity 0.3s ease;
 }
 
 .logo:hover .logoImage {
-  filter: drop-shadow(0 0 20px rgba(193, 45, 224, 0.6));
+  opacity: 0.8;
 }
 
 /* Desktop Navigation */
@@ -63,39 +60,28 @@
 .navLink {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  padding: 0.7rem 1.25rem;
-  color: rgba(255, 255, 255, 0.9);
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  color: rgba(255, 255, 255, 0.8);
   background: transparent;
   border: none;
-  border-radius: 12px;
+  border-radius: 8px;
   font-size: 0.95rem;
   font-weight: 500;
   font-family: inherit;
   text-decoration: none;
   cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-}
-
-.navLink svg {
-  font-size: 1rem;
-  transition: transform 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .navLink:hover {
-  background: rgba(193, 45, 224, 0.12);
-  color: #e86ff5;
-}
-
-.navLink:hover svg {
-  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
 }
 
 .navLink.active {
-  background: linear-gradient(135deg, rgba(193, 45, 224, 0.2), rgba(138, 43, 226, 0.2));
+  background: rgba(193, 45, 224, 0.15);
   color: #e86ff5;
-  box-shadow: 0 0 20px rgba(193, 45, 224, 0.3);
 }
 
 .chevron {
@@ -115,32 +101,30 @@
 
 .dropdownMenu {
   position: absolute;
-  top: calc(100% + 12px);
+  top: calc(100% + 8px);
   left: 0;
-  min-width: 220px;
-  background: rgba(20, 20, 20, 0.98);
-  backdrop-filter: blur(30px);
-  border: 1px solid rgba(193, 45, 224, 0.3);
-  border-radius: 16px;
-  padding: 0.75rem;
-  box-shadow: 
-    0 20px 60px rgba(0, 0, 0, 0.5),
-    0 0 30px rgba(193, 45, 224, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  min-width: 200px;
+  background: rgba(20, 20, 20, 0.95);
+  backdrop-filter: blur(20px);
+  
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 0.5rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
   z-index: 1002;
 }
 
 .dropdownItem {
   display: flex;
   align-items: center;
-  gap: 0.85rem;
+  gap: 0.75rem;
   width: 100%;
-  padding: 0.9rem 1.1rem;
-  color: rgba(255, 255, 255, 0.9);
+  padding: 0.75rem 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
   background: transparent;
   border: none;
-  border-radius: 10px;
-  font-size: 0.92rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
   font-weight: 500;
   font-family: inherit;
   text-decoration: none;
@@ -150,14 +134,13 @@
 }
 
 .dropdownItem svg {
-  font-size: 1.05rem;
+  font-size: 1rem;
   color: #c12de0;
 }
 
 .dropdownItem:hover {
-  background: rgba(193, 45, 224, 0.15);
-  color: #e86ff5;
-  transform: translateX(4px);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
 }
 
 /* Mobile Toggle */
@@ -165,129 +148,97 @@
   display: none;
   align-items: center;
   justify-content: center;
-  width: 50px;
-  height: 50px;
+  width: 44px;
+  height: 44px;
   padding: 0;
-  background: rgba(193, 45, 224, 0.1);
-  border: 1px solid rgba(193, 45, 224, 0.3);
-  border-radius: 12px;
-  color: #e86ff5;
-  font-size: 1.25rem;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 1.2rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   z-index: 1001;
 }
 
 .menuToggle:hover {
-  background: #c12de0;
-  color: white;
-  transform: scale(1.05);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.menuToggle:active {
+  transform: scale(0.95);
 }
 
 /* Mobile Menu */
 .backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
   z-index: 998;
 }
 
 .mobileMenu {
-  position: fixed;
+  position:absolute; 
   top: 0;
   right: 0;
   bottom: 0;
-  width: min(350px, 100vw);
+  height: 1000px;
+  width: min(320px, 85vw);
   background: rgba(15, 15, 15, 0.98);
-  backdrop-filter: blur(40px);
-  border-left: 1px solid rgba(193, 45, 224, 0.2);
-  box-shadow: -10px 0 50px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(20px);
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: -5px 0 30px rgba(0, 0, 0, 0.4);
   overflow-y: auto;
   z-index: 999;
-}
-
-.mobileHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1.5rem;
-  border-bottom: 1px solid rgba(193, 45, 224, 0.2);
-  background: rgba(193, 45, 224, 0.05);
-}
-
-.mobileLogo {
-  height: 45px;
-  width: auto;
-}
-
-.closeBtn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 42px;
-  height: 42px;
-  background: rgba(193, 45, 224, 0.15);
-  border: 1px solid rgba(193, 45, 224, 0.3);
-  border-radius: 10px;
-  color: #e86ff5;
-  font-size: 1.1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.closeBtn:hover {
-  background: #c12de0;
-  color: white;
-  transform: rotate(90deg);
+  padding: 1.5rem 0;
 }
 
 .mobileNavLinks {
   list-style: none;
-  padding: 1.25rem;
+  padding: 0 1rem;
   margin: 0;
 }
 
 .mobileNavLink {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
   width: 100%;
-  padding: 1.1rem 1.2rem;
-  margin-bottom: 0.6rem;
-  color: rgba(255, 255, 255, 0.9);
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+  color: rgba(255, 255, 255, 0.8);
   background: transparent;
   border: none;
-  border-radius: 12px;
+  border-radius: 10px;
   font-size: 1rem;
   font-weight: 500;
   font-family: inherit;
   text-decoration: none;
   text-align: left;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   position: relative;
 }
 
 .mobileNavLink svg {
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   flex-shrink: 0;
 }
 
 .mobileNavLink:hover,
 .mobileNavLink.activeLink {
-  background: rgba(193, 45, 224, 0.15);
-  color: #e86ff5;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
 }
 
 .activeDot {
   position: absolute;
-  right: 1.2rem;
-  width: 8px;
-  height: 8px;
+  right: 1rem;
+  width: 6px;
+  height: 6px;
   background: #e86ff5;
   border-radius: 50%;
-  box-shadow: 0 0 12px rgba(232, 111, 245, 0.8);
 }
 
 /* Sub Menu */
@@ -300,17 +251,17 @@
 .subMenuItem {
   display: flex;
   align-items: center;
-  gap: 0.9rem;
-  padding: 0.95rem 1.2rem;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
   margin-bottom: 0.4rem;
-  color: rgba(255, 255, 255, 0.8);
-  background: rgba(193, 45, 224, 0.08);
-  border-left: 3px solid rgba(193, 45, 224, 0.4);
-  border-radius: 10px;
-  font-size: 0.92rem;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.04);
+  border-left: 2px solid rgba(193, 45, 224, 0.4);
+  border-radius: 8px;
+  font-size: 0.9rem;
   font-weight: 500;
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .subMenuItem svg {
@@ -319,13 +270,12 @@
 }
 
 .subMenuItem:hover {
-  background: rgba(193, 45, 224, 0.18);
+  background: rgba(255, 255, 255, 0.08);
   border-left-color: #e86ff5;
-  color: #e86ff5;
-  transform: translateX(6px);
+  color: #fff;
 }
 
-/* Responsive */
+/* Responsive Breakpoints */
 @media (max-width: 888px) {
   .navLinks {
     display: none;
@@ -336,11 +286,11 @@
   }
 
   .container {
-    padding: 0 1.25rem;
+    padding: 0 1.5rem;
   }
 
   .logoImage {
-    height: 50px;
+    height: 45px;
   }
 }
 
@@ -351,7 +301,27 @@
   }
 
   .logoImage {
-    height: 45px;
+    height: 42px;
+  }
+
+  .container {
+    padding: 0 1rem;
+  }
+
+  .menuToggle {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+  }
+
+  .mobileNavLink {
+    padding: 0.9rem;
+    font-size: 0.95rem;
+  }
+
+  .subMenuItem {
+    padding: 0.75rem 0.9rem;
+    font-size: 0.88rem;
   }
 }
 

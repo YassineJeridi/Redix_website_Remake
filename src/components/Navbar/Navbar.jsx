@@ -1,4 +1,5 @@
 // src/components/Navbar/Navbar.jsx
+
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -29,6 +30,18 @@ const Navbar = () => {
     { id: 'book-call', label: 'Contact', href: '/#book-call', icon: FaEnvelope, isHash: true }
   ];
 
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
@@ -43,13 +56,14 @@ const Navbar = () => {
           }
           return false;
         });
+        
         if (currentSection) setActiveSection(currentSection);
       }
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [location.pathname]);
+  }, [location.pathname, navItems]);
 
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
@@ -83,33 +97,30 @@ const Navbar = () => {
         setIsWorkOpen(false);
       }
     };
+
     document.addEventListener('click', handleClickOutside);
     return () => document.removeEventListener('click', handleClickOutside);
   }, []);
 
+  // Close mobile menu on route change
+  useEffect(() => {
+    setIsOpen(false);
+    setIsWorkOpen(false);
+  }, [location.pathname]);
+
   return (
-    <motion.nav
-      className={`${styles.navbar} ${scrolled ? styles.scrolled : ''}`}
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
+    <nav className={`${styles.navbar} ${scrolled ? styles.scrolled : ''}`}>
       <div className={styles.container}>
         {/* Logo */}
         <Link to="/" className={styles.logo} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-          <motion.img 
-            src={logoImage} 
-            alt="Redix" 
-            className={styles.logoImage}
-            whileHover={{ scale: 1.05 }}
-          />
+          <img src={logoImage} alt="Redix Solutions" className={styles.logoImage} />
         </Link>
 
         {/* Desktop Nav */}
         <ul className={styles.navLinks}>
           {navItems.map((item) => {
             const Icon = item.icon;
-            
+
             if (item.hasDropdown) {
               return (
                 <li key={item.id} className={styles.dropdown}>
@@ -118,37 +129,28 @@ const Navbar = () => {
                     className={`${styles.navLink} ${isWorkOpen ? styles.active : ''}`}
                   >
                     <Icon />
-                    <span>{item.label}</span>
+                    {item.label}
                     <FaChevronDown className={`${styles.chevron} ${isWorkOpen ? styles.rotated : ''}`} />
                   </button>
                   
-                  <AnimatePresence>
-                    {isWorkOpen && (
-                      <motion.div
-                        className={styles.dropdownMenu}
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        {workItems.map((work) => {
-                          const WorkIcon = work.icon;
-                          const Component = work.isHash ? Link : Link;
-                          return (
-                            <Component
-                              key={work.label}
-                              to={work.href}
-                              onClick={() => handleWorkItemClick(work)}
-                              className={styles.dropdownItem}
-                            >
-                              <WorkIcon />
-                              <span>{work.label}</span>
-                            </Component>
-                          );
-                        })}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                  {isWorkOpen && (
+                    <div className={styles.dropdownMenu}>
+                      {workItems.map((work) => {
+                        const WorkIcon = work.icon;
+                        return (
+                          <Link
+                            key={work.label}
+                            to={work.href}
+                            onClick={() => handleWorkItemClick(work)}
+                            className={styles.dropdownItem}
+                          >
+                            <WorkIcon />
+                            {work.label}
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  )}
                 </li>
               );
             }
@@ -161,7 +163,7 @@ const Navbar = () => {
                   className={`${styles.navLink} ${activeSection === item.id ? styles.active : ''}`}
                 >
                   <Icon />
-                  <span>{item.label}</span>
+                  {item.label}
                 </Link>
               </li>
             );
@@ -179,97 +181,93 @@ const Navbar = () => {
       </div>
 
       {/* Mobile Menu */}
-      <AnimatePresence>
-        {isOpen && (
-          <>
-            <motion.div
-              className={styles.backdrop}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setIsOpen(false)}
-            />
-            <motion.div
-              className={styles.mobileMenu}
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'tween', duration: 0.3 }}
-            >
-              <div className={styles.mobileHeader}>
-                <img src={logoImage} alt="Redix" className={styles.mobileLogo} />
-                <button className={styles.closeBtn} onClick={() => setIsOpen(false)}>
-                  <FaTimes />
-                </button>
-              </div>
-
-              <ul className={styles.mobileNavLinks}>
-                {navItems.map((item) => {
-                  const Icon = item.icon;
-                  
-                  if (item.hasDropdown) {
-                    return (
-                      <li key={item.id}>
-                        <button
-                          onClick={() => setIsWorkOpen(!isWorkOpen)}
-                          className={`${styles.mobileNavLink} ${isWorkOpen ? styles.activeLink : ''}`}
-                        >
-                          <Icon />
-                          <span>{item.label}</span>
-                          <FaChevronDown className={`${styles.chevron} ${isWorkOpen ? styles.rotated : ''}`} />
-                        </button>
-                        
-                        <AnimatePresence>
-                          {isWorkOpen && (
-                            <motion.div
-                              className={styles.subMenu}
-                              initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: 'auto', opacity: 1 }}
-                              exit={{ height: 0, opacity: 0 }}
-                            >
-                              {workItems.map((work) => {
-                                const WorkIcon = work.icon;
-                                return (
-                                  <Link
-                                    key={work.label}
-                                    to={work.href}
-                                    onClick={() => handleWorkItemClick(work)}
-                                    className={styles.subMenuItem}
-                                  >
-                                    <WorkIcon />
-                                    <span>{work.label}</span>
-                                  </Link>
-                                );
-                              })}
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </li>
-                    );
-                  }
-
-                  return (
-                    <li key={item.id}>
-                      <Link
-                        to={item.href}
-                        onClick={(e) => { handleNavClick(e, item); setIsOpen(false); }}
-                        className={`${styles.mobileNavLink} ${activeSection === item.id ? styles.activeLink : ''}`}
+      {/* Mobile Menu */}
+<AnimatePresence>
+  {isOpen && (
+    <>
+      <motion.div
+        className={styles.backdrop}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={() => setIsOpen(false)}
+      />
+      <motion.div
+        className={styles.mobileMenu}
+        initial={{ x: '100%' }}
+        animate={{ x: 0 }}
+        exit={{ x: '100%' }}
+        transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <ul className={styles.mobileNavLinks}>
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            
+            if (item.hasDropdown) {
+              return (
+                <li key={item.id}>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setIsWorkOpen(!isWorkOpen); }}
+                    className={`${styles.mobileNavLink} ${isWorkOpen ? styles.activeLink : ''}`}
+                  >
+                    <Icon />
+                    {item.label}
+                    <FaChevronDown className={`${styles.chevron} ${isWorkOpen ? styles.rotated : ''}`} />
+                  </button>
+                  <AnimatePresence>
+                    {isWorkOpen && (
+                      <motion.div
+                        className={styles.subMenu}
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
                       >
-                        <Icon />
-                        <span>{item.label}</span>
-                        {activeSection === item.id && location.pathname === '/' && (
-                          <span className={styles.activeDot} />
-                        )}
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
-    </motion.nav>
+                        {workItems.map((work) => {
+                          const WorkIcon = work.icon;
+                          return (
+                            <Link
+                              key={work.label}
+                              to={work.href}
+                              onClick={() => handleWorkItemClick(work)}
+                              className={styles.subMenuItem}
+                            >
+                              <WorkIcon />
+                              {work.label}
+                            </Link>
+                          );
+                        })}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </li>
+              );
+            }
+            
+            return (
+              <li key={item.id}>
+                <Link
+                  to={item.href}
+                  onClick={(e) => { handleNavClick(e, item); setIsOpen(false); }}
+                  className={`${styles.mobileNavLink} ${activeSection === item.id ? styles.activeLink : ''}`}
+                >
+                  <Icon />
+                  {item.label}
+                  {activeSection === item.id && location.pathname === '/' && (
+                    <span className={styles.activeDot} />
+                  )}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </motion.div>
+    </>
+  )}
+</AnimatePresence>
+
+    </nav>
   );
 };
 
