@@ -16,10 +16,10 @@ const Navbar = () => {
 
   const workItems = [
     { label: 'Quick Overview', href: '/#video-showcase', icon: FaEye, isHash: true },
-    { label: 'Furniture Store', href: '/furniture', icon: FaCouch, isHash: false },
+    { label: 'Furniture/meuble', href: '/furniture', icon: FaCouch, isHash: false },
     { label: 'Travel Agency', href: '/travel', icon: FaPlane, isHash: false },
-    { label: 'Fashion Portfolio', href: '/fashion', icon: FaTshirt, isHash: false },
-    { label: 'Chef Portfolio', href: '/chef', icon: FaUtensils, isHash: false }
+    { label: 'Fashion / clothing', href: '/fashion', icon: FaTshirt, isHash: false },
+    { label: 'Chef / restaurant', href: '/chef', icon: FaUtensils, isHash: false }
   ];
 
   const navItems = [

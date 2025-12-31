@@ -24,7 +24,7 @@ const ChefGallery = () => {
         animate={{ opacity: 1, y: 0 }}
       >
         <FaUtensils className={styles.headerIcon} />
-        <h1>Chef Portfolio</h1>
+        <h1>Chef / restaurant</h1>
         <p>Culinary excellence and artistic food presentations</p>
       </motion.div>
 
