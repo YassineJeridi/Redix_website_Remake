@@ -1,256 +1,154 @@
 // src/components/VideoShowcase/VideoShowcase.jsx
-import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { motion, useInView, AnimatePresence } from 'framer-motion';
-import { FaPlay, FaFilm } from 'react-icons/fa';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaPlay, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { videoProjects } from '../../data/videoShowcase';
 import VideoCard from './VideoCard';
-import VideoControls from './VideoControls';
 import styles from './VideoShowcase.module.css';
 
 const VideoShowcase = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [direction, setDirection] = useState(0); // 1 for next, -1 for prev, 0 for initial
-  const [isVisible, setIsVisible] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const [loadedVideos, setLoadedVideos] = useState(new Set());
-  const [errorVideos, setErrorVideos] = useState(new Set());
-
-  const sectionRef = useRef(null);
+  const [direction, setDirection] = useState(0);
   const touchStartX = useRef(null);
-  const isInView = useInView(sectionRef, { threshold: 0.2, once: true });
 
-  // Memoize current video to prevent unnecessary re-renders
-  const currentVideo = useMemo(() => videoProjects[currentIndex], [currentIndex]);
+  const currentVideo = videoProjects[currentIndex];
 
-  // Optimized mobile detection with debouncing
-  useEffect(() => {
-    let timeoutId;
-    const checkMobile = () => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        setIsMobile(window.innerWidth <= 768);
-      }, 100);
-    };
-
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => {
-      window.removeEventListener('resize', checkMobile);
-      clearTimeout(timeoutId);
-    };
-  }, []);
-
-  // Set visibility when in view
-  useEffect(() => {
-    if (isInView && !isVisible) {
-      setIsVisible(true);
-    }
-  }, [isInView, isVisible]);
-
-  // Enhanced navigation with direction awareness
-  const changeVideo = useCallback((newIndex, animationDirection) => {
-    if (isTransitioning || newIndex === currentIndex) return;
-    
-    setDirection(animationDirection);
-    setIsTransitioning(true);
+  const changeVideo = useCallback((newIndex, dir) => {
+    if (newIndex === currentIndex) return;
+    setDirection(dir);
     setCurrentIndex(newIndex);
-    
-    // Reset transition state after animation completes
-    setTimeout(() => {
-      setIsTransitioning(false);
-      // Reset direction after transition to prevent unwanted animations
-      setDirection(0);
-    }, 600); // Slightly longer than animation duration
-  }, [currentIndex, isTransitioning]);
+  }, [currentIndex]);
 
   const nextVideo = useCallback(() => {
     const newIndex = (currentIndex + 1) % videoProjects.length;
-    changeVideo(newIndex, 1); // Direction: 1 (forward)
+    changeVideo(newIndex, 1);
   }, [currentIndex, changeVideo]);
 
   const prevVideo = useCallback(() => {
     const newIndex = (currentIndex - 1 + videoProjects.length) % videoProjects.length;
-    changeVideo(newIndex, -1); // Direction: -1 (backward)
+    changeVideo(newIndex, -1);
   }, [currentIndex, changeVideo]);
 
-  // Go to specific video with smart direction detection
-  const goToVideo = useCallback((targetIndex) => {
-    if (isTransitioning || targetIndex === currentIndex) return;
-    
-    // Determine direction based on target index
-    const animationDirection = targetIndex > currentIndex ? 1 : -1;
-    changeVideo(targetIndex, animationDirection);
-  }, [currentIndex, changeVideo, isTransitioning]);
+  const goToVideo = (index) => {
+    if (index === currentIndex) return;
+    changeVideo(index, index > currentIndex ? 1 : -1);
+  };
 
-  // Enhanced touch handlers with direction awareness
-  const handleTouchStart = useCallback((e) => {
+  const handleTouchStart = (e) => {
     touchStartX.current = e.touches[0].clientX;
-  }, []);
+  };
 
-  const handleTouchEnd = useCallback((e) => {
+  const handleTouchEnd = (e) => {
     if (!touchStartX.current) return;
-    
-    const touchEndX = e.changedTouches[0].clientX;
-    const diff = touchStartX.current - touchEndX;
-    
-    if (Math.abs(diff) > 50) { // Minimum swipe distance
-      if (diff > 0) {
-        // Swiped left -> next video (slide left)
-        nextVideo();
-      } else {
-        // Swiped right -> previous video (slide right)
-        prevVideo();
-      }
+    const diff = touchStartX.current - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) {
+      diff > 0 ? nextVideo() : prevVideo();
     }
-    
     touchStartX.current = null;
-  }, [nextVideo, prevVideo]);
+  };
 
-  // Keyboard navigation with direction support
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'ArrowLeft') prevVideo();
       if (e.key === 'ArrowRight') nextVideo();
-      if (e.key === ' ') {
-        e.preventDefault();
-        // Space key can be used for play/pause if needed
-      }
     };
-
-    if (isVisible) {
-      window.addEventListener('keydown', handleKeyDown);
-      return () => window.removeEventListener('keydown', handleKeyDown);
-    }
-  }, [isVisible, nextVideo, prevVideo]);
-
-  // Video load/error handlers
-  const handleVideoLoad = useCallback((videoId) => {
-    setLoadedVideos(prev => new Set([...prev, videoId]));
-  }, []);
-
-  const handleVideoError = useCallback((videoId) => {
-    setErrorVideos(prev => new Set([...prev, videoId]));
-  }, []);
-
-  // Progress calculation
-  const progress = ((currentIndex + 1) / videoProjects.length) * 100;
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [nextVideo, prevVideo]);
 
   return (
-    <section ref={sectionRef} id="video-showcase" className={styles.videoShowcase} >
+    <section className={styles.showcase} id="video-showcase">
       <div className={styles.container}>
         {/* Header */}
-        <motion.div 
+        <motion.div
           className={styles.header}
-          initial={{ opacity: 0, y: 50 }}
-          animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <div className={styles.sectionTag}>
-            <FaFilm />
-            Video Portfolio
+          <div className={styles.badge}>
+            <FaPlay />
+            <span>Video Portfolio</span>
           </div>
           <h2 className={styles.title}>Our Creative Work</h2>
           <p className={styles.subtitle}>
-            Discover our stunning collection of video content that brings brands to life and tells compelling stories
+            Stunning video content that brings brands to life and tells compelling stories
           </p>
         </motion.div>
 
-        {/* Video Display */}
-        <div className={styles.videoDisplay}>
-          {!isMobile && (
-            <VideoControls
-              onPrev={prevVideo}
-              onNext={nextVideo}
-              currentIndex={currentIndex}
-              totalVideos={videoProjects.length}
-              disabled={isTransitioning}
-            />
-          )}
-
-          <div 
-            className={styles.videoCardContainer}
-            onTouchStart={isMobile ? handleTouchStart : undefined}
-            onTouchEnd={isMobile ? handleTouchEnd : undefined}
+        {/* Video Player */}
+        <div 
+          className={styles.player}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
+          <button
+            className={`${styles.navBtn} ${styles.prevBtn}`}
+            onClick={prevVideo}
+            aria-label="Previous video"
           >
-            <AnimatePresence mode="wait" initial={false} custom={direction}>
-              <VideoCard
-                key={currentVideo.id}
-                video={currentVideo}
-                isActive={true}
-                index={currentIndex}
-                isTransitioning={isTransitioning}
-                isVisible={isVisible}
-                onVideoLoad={handleVideoLoad}
-                onVideoError={handleVideoError}
-                direction={direction}
-              />
-            </AnimatePresence>
-          </div>
+            <FaChevronLeft />
+          </button>
 
-          {isMobile && (
-            <motion.div 
-              className={styles.swipeIndicator}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1 }}
-            >
-              &larr;Swipe to browse videos&rarr;
-            </motion.div>
-          )}
+          <AnimatePresence mode="wait" custom={direction}>
+            <VideoCard
+              key={currentIndex}
+              video={currentVideo}
+              direction={direction}
+            />
+          </AnimatePresence>
+
+          <button
+            className={`${styles.navBtn} ${styles.nextBtn}`}
+            onClick={nextVideo}
+            aria-label="Next video"
+          >
+            <FaChevronRight />
+          </button>
+
+          <div className={styles.mobileHint}>
+            Swipe to navigate
+          </div>
         </div>
 
-        {/* Navigation */}
-        <motion.div 
-          className={styles.navigation}
-          initial={{ opacity: 0, y: 30 }}
-          animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
+        {/* Video Title Only */}
+        <motion.div
+          className={styles.info}
+          key={currentIndex}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
         >
-          {/* Progress Bar */}
-          <div className={styles.progressContainer}>
-            <div className={styles.progressBar}>
-              <motion.div 
-                className={styles.progressFill}
-                initial={{ width: 0 }}
-                animate={{ width: `${progress}%` }}
-                transition={{ duration: 0.3 }}
-              />
-            </div>
-            <span className={styles.progressText}>
-              {currentIndex + 1} / {videoProjects.length}
-            </span>
-          </div>
-
-          {/* Thumbnail Navigation */}
-          <div className={styles.thumbnailNav}>
-            {videoProjects.map((video, index) => (
-              <motion.button
-                key={video.id}
-                className={`${styles.thumbItem} ${
-                  index === currentIndex ? styles.activeThumb : ''
-                } ${errorVideos.has(video.id) ? styles.errorThumb : ''}`}
-                onClick={() => goToVideo(index)}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                disabled={isTransitioning}
-                aria-label={`View ${video.title}`}
-              >
-                <img 
-                  src={video.thumbnailUrl} 
-                  alt={video.title}
-                  loading="lazy"
-                />
-                <div className={styles.thumbOverlay}>
-                  <span className={styles.thumbType}>{video.type}</span>
-                </div>
-                {loadedVideos.has(video.id) && (
-                  <div className={styles.loadedIndicator} />
-                )}
-              </motion.button>
-            ))}
-          </div>
+          <h3 className={styles.videoTitle}>{currentVideo.title}</h3>
         </motion.div>
+
+        {/* Thumbnails */}
+        <div className={styles.thumbnails}>
+          {videoProjects.map((video, index) => (
+            <button
+              key={video.id}
+              className={`${styles.thumb} ${index === currentIndex ? styles.activeThumb : ''}`}
+              onClick={() => goToVideo(index)}
+              aria-label={`Go to ${video.title}`}
+            >
+              <video src={video.videoUrl} muted preload="metadata" />
+              <div className={styles.thumbOverlay}>
+                <span>{video.type}</span>
+              </div>
+            </button>
+          ))}
+        </div>
+
+        {/* Progress Bar */}
+        <div className={styles.progress}>
+          <motion.div
+            className={styles.progressBar}
+            initial={{ width: 0 }}
+            animate={{ width: `${((currentIndex + 1) / videoProjects.length) * 100}%` }}
+            transition={{ duration: 0.3 }}
+          />
+        </div>
       </div>
     </section>
   );
